@@ -7,7 +7,9 @@ const UserPage = ({ questions }) => {
   return (
     <div className={styles.all}>
       <div className={styles.questionsMainContainer}>
-        <h1 className="question-head">Questions</h1>
+        <div className={styles.questionHeadDiv}>
+          <h1 className={styles.questionHead}>QUESTIONS</h1>
+        </div>
 
         {questions.map((item) => {
           return (

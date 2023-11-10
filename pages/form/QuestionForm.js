@@ -27,6 +27,18 @@ const QuestionForm = () => {
       [name]: value,
     }));
   };
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      // Convert the selected file to Base64
+      const base64Image = await convertToBase64(file);
+      setFormData((prevData) => ({
+        ...prevData,
+        Image: base64Image,
+      }));
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,11 +116,11 @@ const QuestionForm = () => {
               <div className={styles.intputDiv}>
                 <div className={styles.labels}>Image</div>
                 <input
-                  type="text"
+                  type="file"
                   name="Image"
-                  value={formData.Image}
+                  accept="image/*"
                   placeholder="Image url"
-                  onChange={handleInputChange}
+                  onChange={handleImageUpload}
                 />
               </div>
             </div>
@@ -183,4 +195,16 @@ const QuestionForm = () => {
   );
 };
 
+function convertToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+}
 export default QuestionForm;

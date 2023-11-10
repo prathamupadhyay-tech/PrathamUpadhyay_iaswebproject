@@ -18,7 +18,6 @@ const questionSchema = new mongoose.Schema(
     },
     Image: {
       type: String,
-      required: true,
     },
     url: {
       type: String,

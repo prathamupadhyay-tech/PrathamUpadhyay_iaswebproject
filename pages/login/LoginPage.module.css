@@ -17,7 +17,7 @@
  
 }
 .loginContainer{
-    padding: 1em;
+    padding: 2em;
     display: flex;
     flex-direction: column;
     gap: 2em;
@@ -59,6 +59,11 @@
     background-color: rgb(173, 207, 240);
     width: 40%;
     height: 2em;
+    font-size: 1.1em;
+}
+.loginBtn:hover{
+    cursor: pointer;
+
 }
 .loginBtnDiv{
     display: flex;
@@ -66,4 +71,15 @@
     align-items: center;
     
 
+}
+.optionDiv{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    width: 100%;
+}
+.optionDiv>div{
+    font-size: 1.2em;
+    display: flex;
+    gap: 0.2em;
 }

@@ -1,3 +1,66 @@
 .p{
-    background-color: pink;
+    background-color: rgb(116, 116, 116);
+}
+.mainQuestionContainer{
+    display: flex;
+    width: 100%;
+   
+    min-height: 92.7vh;
+    background-color: var(--darker-color);
+}
+
+.questionLeftContainer{
+    width: 50%;
+    height: auto;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    margin: 0.5em;
+    max-height: 91vh;
+    overflow-y: scroll;
+    border-radius: 0.5em;
+    border: 1px rgba(255, 255, 255, 0.181) solid;
+    margin-right: 0.25em;
+    color: white;
+    background-color: var(--dark-color);
+}
+.questionLeftContainer label{
+    font-weight: 600;
+    font-size: 1.3em;
+}
+.questionrightContainer label{
+    font-weight: 600;
+    font-size: 1.3em;
+}
+.questionLeftContainer h3{
+    font-weight: 300;
+    color: rgb(165, 165, 165);
+}
+.questionrightContainer h3{
+    font-weight: 300;
+    color: rgb(165, 165, 165);
+}
+.questionrightContainer{
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    width: 50%;
+    border-radius: 0.5em;
+    height: auto;
+    max-height: 91vh;
+    color: white;
+    margin: 0.5em;
+    border: 1px rgba(255, 255, 255, 0.181) solid;
+    margin-left: 0.25em;
+    background-color: var(--dark-color);
+}
+.questionImageDiv{
+    width: 100%;
+    /* border: 1px red solid; */
+    height: auto;
+    display: flex;
+  
+    align-items: center;
 }
