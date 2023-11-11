@@ -1,17 +1,24 @@
-import React, { useEffect } from "react";
+import React  from "react";
 import styles from "./AdminPage.module.css";
 import mongoose from "mongoose";
 import question from "@/models/question";
 import Link from "next/link";
-import { useRouter } from "next/router";
+
 const AdminPage = ({ questions }) => {
-  const router = useRouter();
 
   return (
     <div className={styles.all}>
       <div className={styles.adminMainContainer}>
+        <div className={styles.adminTopContainter}>
         <h1>Admin page</h1>
-
+        <div className={styles.adminContainer}>
+          <Link href={"/form/QuestionForm"}>
+            {" "}
+            <button className={styles.addQuestionBtn}>Add question</button>
+          </Link>
+        </div>
+        </div>
+       
         {questions.map((item) => {
           return (
             <Link
@@ -32,12 +39,7 @@ const AdminPage = ({ questions }) => {
           );
         })}
 
-        <div className={styles.adminContainer}>
-          <Link href={"/form/QuestionForm"}>
-            {" "}
-            <button className={styles.addQuestionBtn}>Add question</button>
-          </Link>
-        </div>
+       
       </div>
     </div>
   );

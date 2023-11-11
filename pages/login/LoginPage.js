@@ -2,7 +2,11 @@
 import LoginCred from "@/components/LoginCred";
 import React, { useState } from "react";
 import styles from "./LoginPage.module.css";
+import facebook from "./imgs/facebook.png";
+import github from "./imgs/github.png";
+import social from "./imgs/social.png";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import Cookies from "js-cookie";
 const jwt = require("jsonwebtoken");
 const LoginPage = () => {
@@ -26,10 +30,10 @@ const LoginPage = () => {
     if (userData && LoginCred) {
       if (userData.email === LoginCred.email) {
         if (userData.password === LoginCred.password) {
-          var token = jwt.sign({ email: userData.email }, "jwtsecret", {
+          var token = jwt.sign({ email: userData.email }, "ThisIsASecret", {
             expiresIn: "2d",
           });
-          console.log(token);
+          Cookies.set("authToken", token);
           localStorage.setItem("token", token);
           router.push("/Admin/AdminPage");
         } else {
@@ -45,7 +49,8 @@ const LoginPage = () => {
       <div className={styles.loginMainContainer}>
         <div className={styles.loginContainer}>
           <div className={styles.loginHeading}>
-            <h1>Login</h1>
+            <h1>Truely</h1>
+            <h2>IAS</h2>
           </div>
 
           <form className={styles.loginForm} action="">
@@ -62,9 +67,9 @@ const LoginPage = () => {
             </div> */}
 
             <div className={styles.inputDiv}>
-              <div>Email</div>
               <input
                 type="email"
+                placeholder="Email"
                 name="email"
                 value={userData.email}
                 onChange={handleInputChange}
@@ -72,9 +77,9 @@ const LoginPage = () => {
             </div>
 
             <div className={styles.inputDiv}>
-              <div>Password</div>
               <input
                 type="password"
+                placeholder="Password"
                 name="password"
                 value={userData.password}
                 onChange={handleInputChange}
@@ -82,8 +87,25 @@ const LoginPage = () => {
             </div>
             <div className={styles.loginBtnDiv}>
               <button onClick={handleSubmit} className={styles.loginBtn}>
-                Submit
+                Sign in
               </button>
+              <div className={styles.subOptions}>
+                <a href="">forget password?</a>
+                <a href="">Sign up</a>
+              </div>
+            </div>
+
+            <div className={styles.otherOptions}>
+              <p>Or you can login using </p>
+              <div className={styles.otherOptionsIconDiv}>
+                <Image className={styles.icons} href="" src={facebook}></Image>
+                <Image className={styles.icons} href="" src={github}></Image>
+                <Image className={styles.icons} href="" src={social}></Image>
+              </div>
+            </div>
+            <div className={styles.policy}>
+             <p> This site is protected by reCAPTCHA and the Google Privacy Policy
+              and Terms of Service apply.</p>
             </div>
           </form>
         </div>

@@ -1,5 +1,6 @@
 import NavBar from "@/components/NavBar";
 import "@/styles/globals.css";
+import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 export default function App({ Component, pageProps }) {
@@ -11,6 +12,7 @@ export default function App({ Component, pageProps }) {
     e.preventDefault();
 
     localStorage.removeItem("token");
+    Cookies.remove("authToken");
     setkey(Math.random());
     setuser({ value: null });
     router.push("http://localhost:3000/");

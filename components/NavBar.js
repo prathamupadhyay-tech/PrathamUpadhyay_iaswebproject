@@ -1,14 +1,21 @@
 import React from "react";
 import styles from "./Navbar.module.css";
 import Link from "next/link";
-import { useRouter } from "next/router";
-const NavBar = ({ logout ,  user }) => {
- 
+
+const NavBar = ({ logout, user }) => {
   return (
     <div className={styles.navbarMainContainer}>
       <div className={styles.navbarContainer}>
-        <div className={styles.logo}>
-          <h1>Truely IAS</h1>
+        <div className={styles.navEleDiv}>
+          <div className={styles.logo}>
+            <h1>Truely IAS</h1>
+          </div>
+          <div className={styles.navEle}>
+            <Link href={"/"}>Home</Link>
+          </div>
+          <div className={styles.navEle}>
+            <Link href={"/Admin/AdminPage"}>Add Questions</Link>
+          </div>
         </div>
 
         <div className={styles.loginBtnDiv}>

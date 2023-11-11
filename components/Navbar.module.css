@@ -2,7 +2,9 @@
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 1em;
+    padding: 0.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
     color: white;
     background-color: #2e2e2e;
     border-bottom: 1px rgba(255, 255, 255, 0.201) solid;
@@ -28,4 +30,12 @@
 .loginBtn:hover{
     cursor: pointer;
     background-color: rgba(255, 166, 0, 0.59);
+}
+.navEleDiv{
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    font-weight: 600;
+    font-size: 1.2em;
+    
 }

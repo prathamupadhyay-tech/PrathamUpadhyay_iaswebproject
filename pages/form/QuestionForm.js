@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect } from "react";
 import React from "react";
 import styles from "./QuestionForm.module.css";
 import { useRouter } from "next/router";
@@ -40,6 +40,31 @@ const QuestionForm = () => {
     }
   };
 
+  useEffect(() => {
+    const handlePaste = async (e) => {
+      const items = e.clipboardData.items;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") !== -1) {
+          const file = items[i].getAsFile();
+
+          if (file) {
+            const base64Image = await convertToBase64(file);
+            setFormData((prevData) => ({
+              ...prevData,
+              Image: base64Image,
+            }));
+          }
+        }
+      }
+    };
+
+    document.addEventListener("paste", handlePaste);
+
+    return () => {
+      document.removeEventListener("paste", handlePaste);
+    };
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
