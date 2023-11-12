@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }) {
     Cookies.remove("authToken");
     setkey(Math.random());
     setuser({ value: null });
-    router.push(`${apiUrl}`);
+    router.push(`/`);
   };
   useEffect(() => {
     const token = localStorage.getItem("token");
