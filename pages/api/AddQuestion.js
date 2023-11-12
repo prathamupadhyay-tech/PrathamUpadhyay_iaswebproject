@@ -2,7 +2,13 @@ import question from "@/models/question";
 import connectDb from "@/middleware/mongoose";
 
 const handler = async (req, res) => {
-  console.log(req.method);
+  const existingQuestion = await question.findOne({ slug: req.body.slug });
+
+  if (existingQuestion) {
+    return res
+      .status(400)
+      .json({ message: "A question with this slug already exists." });
+  }
   if (req.method == "POST") {
     let q = new question({
       Title: req.body.Title,

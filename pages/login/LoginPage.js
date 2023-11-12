@@ -11,12 +11,16 @@ import Cookies from "js-cookie";
 const jwt = require("jsonwebtoken");
 const LoginPage = () => {
   const router = useRouter();
+  const [emailAlert, setEmailAlert] = useState(false);
+  const [passAlert, setPassAlert] = useState(false);
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
 
   const handleInputChange = (e) => {
+    setEmailAlert(false);
+    setPassAlert(false);
     const { name, value } = e.target;
     setUserData((prevData) => ({
       ...prevData,
@@ -26,8 +30,14 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (userData && LoginCred) {
+    if (!userData.email) {
+      setEmailAlert(true);
+    } else if (!userData.password) {
+      setPassAlert(true);
+    } else if (!userData) {
+      setEmailAlert(true);
+      setPassAlert(true);
+    } else if (userData && LoginCred) {
       if (userData.email === LoginCred.email) {
         if (userData.password === LoginCred.password) {
           var token = jwt.sign({ email: userData.email }, "ThisIsASecret", {
@@ -74,6 +84,7 @@ const LoginPage = () => {
                 value={userData.email}
                 onChange={handleInputChange}
               />
+              {emailAlert && <p>Email is needed!</p>}
             </div>
 
             <div className={styles.inputDiv}>
@@ -84,6 +95,7 @@ const LoginPage = () => {
                 value={userData.password}
                 onChange={handleInputChange}
               />
+              {passAlert && <p>Password is needed!</p>}
             </div>
             <div className={styles.loginBtnDiv}>
               <button onClick={handleSubmit} className={styles.loginBtn}>
@@ -104,8 +116,11 @@ const LoginPage = () => {
               </div>
             </div>
             <div className={styles.policy}>
-             <p> This site is protected by reCAPTCHA and the Google Privacy Policy
-              and Terms of Service apply.</p>
+              <p>
+                {" "}
+                This site is protected by reCAPTCHA and the Google Privacy
+                Policy and Terms of Service apply.
+              </p>
             </div>
           </form>
         </div>

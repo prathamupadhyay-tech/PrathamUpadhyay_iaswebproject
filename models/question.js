@@ -21,7 +21,6 @@ const questionSchema = new mongoose.Schema(
     },
     url: {
       type: String,
-      required: true,
     },
     SubmitTime: {
       type: String,

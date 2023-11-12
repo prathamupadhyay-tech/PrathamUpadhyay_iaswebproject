@@ -41,9 +41,13 @@
 }
 .inputDiv{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     
-    gap: 1em;
+    gap: 0.4em;
+}
+.inputDiv>p{
+    color: rgb(222, 0, 0);
 }
 
 .inputDiv>input{

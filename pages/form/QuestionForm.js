@@ -1,11 +1,14 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import React from "react";
 import styles from "./QuestionForm.module.css";
 import { useRouter } from "next/router";
 import { useState } from "react";
+
 const QuestionForm = () => {
+  const MAX_IMAGE_SIZE_BYTES = 600 * 1024;
   const router = useRouter();
+  const [ImageName, setImageName] = useState("");
   const [formData, setFormData] = useState({
     Title: "",
     QuestionText: "",
@@ -31,40 +34,53 @@ const QuestionForm = () => {
     const file = e.target.files[0];
 
     if (file) {
-      // Convert the selected file to Base64
-      const base64Image = await convertToBase64(file);
-      setFormData((prevData) => ({
-        ...prevData,
-        Image: base64Image,
-      }));
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        alert(
+          "Image size exceeds the maximum allowed size (600KB). Please choose a smaller image."
+        );
+      } else {
+        // console.log("file ", file);
+        setImageName(file.name);
+        const base64Image = await convertToBase64(file);
+        setFormData((prevData) => ({
+          ...prevData,
+          Image: base64Image,
+        }));
+      }
     }
   };
 
-  useEffect(() => {
-    const handlePaste = async (e) => {
-      const items = e.clipboardData.items;
+  const handleImagePaste = async (e) => {
+    if (e.clipboardData.items.length) {
+      for (let i = 0; i < e.clipboardData.items.length; i++) {
+        if (e.clipboardData.items[i].type.indexOf("image") !== -1) {
+          const fileObject = e.clipboardData.items[i].getAsFile();
 
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf("image") !== -1) {
-          const file = items[i].getAsFile();
+          if (fileObject) {
+            if (fileObject.size > MAX_IMAGE_SIZE_BYTES) {
+              alert(
+                "Image size exceeds the maximum allowed size (600KB). Please choose a smaller image."
+              );
+            } else {
+              setImageName(fileObject.name);
+              const base64Image = await convertToBase64(fileObject);
 
-          if (file) {
-            const base64Image = await convertToBase64(file);
-            setFormData((prevData) => ({
-              ...prevData,
-              Image: base64Image,
-            }));
+              if (base64Image) {
+                setFormData((prevData) => ({
+                  ...prevData,
+                  Image: base64Image,
+                }));
+              }
+            }
           }
         }
       }
-    };
-
-    document.addEventListener("paste", handlePaste);
-
-    return () => {
-      document.removeEventListener("paste", handlePaste);
-    };
-  }, []);
+    } else {
+      alert(
+        "No image data was found in your clipboard. Copy an image first or take a screenshot."
+      );
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -81,16 +97,35 @@ const QuestionForm = () => {
       topic: formData.topic,
     };
 
-    const res = await fetch("http://localhost:3000/api/AddQuestion", {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(question),
-    });
+    try {
+      const res = await fetch("http://localhost:3000/api/AddQuestion", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(question),
+      });
 
-    if (res.status === 200) {
+      if (res.status === 200) {
+        setIsLoading(false);
+        router.push("/Admin/AdminPage");
+      } else {
+        const data = await res.json(); // Parse the response body as JSON
+        alert(
+          "An error occurred. Please try again. Error message: " + data.message
+        );
+        setIsLoading(false);
+      }
+    } catch (error) {
+      alert(error);
       setIsLoading(false);
-      router.push("/Admin/AdminPage");
     }
+  };
+
+  const handleClear = (e) => {
+    e.preventDefault();
+    setFormData((prevData) => ({
+      ...prevData,
+      Image: "",
+    }));
   };
 
   return (
@@ -140,13 +175,37 @@ const QuestionForm = () => {
 
               <div className={styles.intputDiv}>
                 <div className={styles.labels}>Image</div>
-                <input
-                  type="file"
-                  name="Image"
-                  accept="image/*"
-                  placeholder="Image url"
-                  onChange={handleImageUpload}
-                />
+
+                <div>
+                  {!formData.Image && (
+                    <input
+                      type="file"
+                      name="Image"
+                      accept="image/*"
+                      placeholder="Image url"
+                      onChange={handleImageUpload}
+                    />
+                  )}
+
+                  {formData.Image && <p>File: {ImageName}</p>}
+                  {!formData.Image && (
+                    <div
+                      onPaste={handleImagePaste}
+                      style={{
+                        border: "2px dashed #ccc",
+                        padding: "20px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <p>Or paste an image using Ctrl+V</p>
+                    </div>
+                  )}
+                  {formData.Image && (
+                    <button onClick={handleClear} className={styles.clearBtn}>
+                      Clear
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
             <div className={styles.separator}></div>
