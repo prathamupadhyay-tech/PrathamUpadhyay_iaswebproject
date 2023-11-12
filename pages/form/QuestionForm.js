@@ -98,7 +98,7 @@ const QuestionForm = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/api/AddQuestion", {
+      const res = await fetch("/api/AddQuestion", {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(question),

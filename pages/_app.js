@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
   const [user, setuser] = useState({ value: null });
   const [key, setkey] = useState(0);
-
+  const apiUrl = process.env.API_URL;
   const logout = (e) => {
     e.preventDefault();
 
@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }) {
     Cookies.remove("authToken");
     setkey(Math.random());
     setuser({ value: null });
-    router.push("http://localhost:3000/");
+    router.push(`${apiUrl}`);
   };
   useEffect(() => {
     const token = localStorage.getItem("token");
