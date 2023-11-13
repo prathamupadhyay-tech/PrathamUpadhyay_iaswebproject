@@ -4,8 +4,9 @@ import styles from "./[slug].module.css";
 import mongoose from "mongoose";
 import question from "@/models/question";
 import Image from "next/image";
+import Link from "next/link";
 
-const Post = ({ questions }) => {
+const Post = ({ questions, prevQuestion, nextQuestion }) => {
   console.log(questions);
   const router = useRouter();
   const { slug } = router.query;
@@ -62,6 +63,20 @@ const Post = ({ questions }) => {
             <label>Topics</label>
             <h3>{questions.topic}</h3>
           </div>
+
+          <div className={styles.navigationBtns}>
+            {prevQuestion && (
+              <Link href={`/question/${prevQuestion.slug}`}>
+                <button>Previous</button>
+              </Link>
+            )}
+
+            {nextQuestion && (
+              <Link href={`/question/${nextQuestion.slug}`}>
+                <button>Next</button>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
       {/* <div>
@@ -76,9 +91,41 @@ export async function getServerSideProps(context) {
   }
 
   let questions = await question.findOne({ slug: context.query.slug });
+  const allQuestions = await question
+    .find({}, "_id slug")
+    .sort({ createdAt: -1 })
+    .lean();
+  const currentQuestion = await question.findOne({ slug: context.query.slug });
+  const currentQuestionIndex = allQuestions.findIndex(
+    (q) => q._id.toString() === currentQuestion._id.toString()
+  );
+  let prevQuestion = null;
+  let nextQuestion = null;
 
+  if (currentQuestionIndex >= 0) {
+    const totalQuestions = allQuestions.length;
+
+    if (currentQuestionIndex > 0) {
+      prevQuestion = allQuestions[currentQuestionIndex - 1];
+    } else {
+      // If the current question is the first one, set prevQuestion to the last question.
+      prevQuestion = allQuestions[totalQuestions - 1];
+    }
+
+    if (currentQuestionIndex < totalQuestions - 1) {
+      nextQuestion = allQuestions[currentQuestionIndex + 1];
+    } else {
+      // If the current question is the last one, set nextQuestion to the first question.
+      nextQuestion = allQuestions[0];
+    }
+  }
+ 
   return {
-    props: { questions: JSON.parse(JSON.stringify(questions)) },
+    props: {
+      questions: JSON.parse(JSON.stringify(questions)),
+      prevQuestion: JSON.parse(JSON.stringify(prevQuestion)),
+      nextQuestion: JSON.parse(JSON.stringify(nextQuestion)),
+    },
   };
 }
 export default Post;
