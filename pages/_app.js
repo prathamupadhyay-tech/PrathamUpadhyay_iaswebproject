@@ -28,8 +28,7 @@ export default function App({ Component, pageProps }) {
   return (
     <div>
       <NavBar logout={logout} user={user} key={key} />
-      {/* <Component {...pageProps} /> */}
-      hello
+      <Component {...pageProps} />
     </div>
   );
 }
