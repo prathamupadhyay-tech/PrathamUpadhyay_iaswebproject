@@ -11,10 +11,10 @@ const NavBar = ({ logout, user }) => {
             <h1>Truely IAS</h1>
           </div>
           <div className={styles.navEle}>
-            <Link href={`${process.env.NEXT_PUBLIC_HOST}`}>Home</Link>
+            <Link href={"/"}>Home</Link>
           </div>
           <div className={styles.navEle}>
-            <Link href={`${process.env.NEXT_PUBLIC_HOST}/Admin/AdminPage`}>
+            <Link href={`/Admin/AdminPage`}>
               Add Questions
             </Link>
           </div>
@@ -27,7 +27,7 @@ const NavBar = ({ logout, user }) => {
             </button>
           )}
           {!user.value && (
-            <Link href={`${process.env.NEXT_PUBLIC_HOST}/login/LoginPage`}>
+            <Link href={`/login/LoginPage`}>
               {" "}
               <button className={styles.loginBtn}>Login</button>
             </Link>
