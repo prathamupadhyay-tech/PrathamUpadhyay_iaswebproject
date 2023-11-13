@@ -8,11 +8,12 @@
 .questionFormContainer{
     display: flex;
     flex-direction: column;
+    padding: 2em;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh;
-
+    height: auto;
+    
 }
 
 .formHeading span{
@@ -70,6 +71,17 @@
     font-size: 1.1em;
     width: 20em;
 }
+@media (max-width: 600px) {
+    .intputDiv>textarea{
+       
+        width: 15em;
+        
+    }
+    .intputDiv>input{
+        
+        width: 10em;
+    } 
+}
 .labels{
     color: grey;
     font-size: 1.2em;
@@ -89,3 +101,9 @@
     border-radius: 0.4em;
     background-color: rgb(202, 202, 202);
 }   
+
+@media (max-width: 1170px) {
+    .formInsideContainer{
+        flex-direction: column;
+    }
+}

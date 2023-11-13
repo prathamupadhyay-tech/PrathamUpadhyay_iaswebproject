@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React from "react";
 import styles from "./[slug].module.css";
 import mongoose from "mongoose";
@@ -8,8 +8,10 @@ import Link from "next/link";
 
 const Post = ({ questions, prevQuestion, nextQuestion }) => {
   console.log(questions);
+
   const router = useRouter();
-  const { slug } = router.query;
+  console.log(router.query);
+  // const { slug } = router.query;
   return (
     <div>
       {/* <p className={styles.p}>The sllug is: {questions.Title}</p> */}
@@ -51,29 +53,31 @@ const Post = ({ questions, prevQuestion, nextQuestion }) => {
           </div>
         </div>
         <div className={styles.questionrightContainer}>
-          <div className={styles.questionSubmitTimeDiv}>
-            <label>Answer</label>
-            <h3>{questions.Answer}</h3>
-          </div>
-          <div className={styles.questionSubjectDiv}>
-            <label>Subject</label>
-            <h3>{questions.Subject}</h3>
-          </div>
-          <div className={styles.TopicsDiv}>
-            <label>Topics</label>
-            <h3>{questions.topic}</h3>
+          <div className={styles.rightConSubDiv}>
+            <div className={styles.questionSubmitTimeDiv}>
+              <label>Answer</label>
+              <h3>{questions.Answer}</h3>
+            </div>
+            <div className={styles.questionSubjectDiv}>
+              <label>Subject</label>
+              <h3>{questions.Subject}</h3>
+            </div>
+            <div className={styles.TopicsDiv}>
+              <label>Topics</label>
+              <h3>{questions.topic}</h3>
+            </div>
           </div>
 
           <div className={styles.navigationBtns}>
             {prevQuestion && (
               <Link href={`/question/${prevQuestion.slug}`}>
-                <button>Previous</button>
+                <button className={styles.prevbutton}>Previous</button>
               </Link>
             )}
 
             {nextQuestion && (
               <Link href={`/question/${nextQuestion.slug}`}>
-                <button>Next</button>
+                <button className={styles.nextbutton}>Next</button>
               </Link>
             )}
           </div>
@@ -119,7 +123,7 @@ export async function getServerSideProps(context) {
       nextQuestion = allQuestions[0];
     }
   }
- 
+
   return {
     props: {
       questions: JSON.parse(JSON.stringify(questions)),

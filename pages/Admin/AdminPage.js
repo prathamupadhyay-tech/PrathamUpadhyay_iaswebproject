@@ -13,31 +13,41 @@ const AdminPage = ({ questions }) => {
           <div className={styles.adminContainer}>
             <Link href={`/form/QuestionForm`}>
               {" "}
-              <button className={styles.addQuestionBtn}>Add question</button>
+              <button className={styles.addQuestionBtn}>+ Add question</button>
             </Link>
           </div>
         </div>
+        <div className={styles.questionHead}>
+          <p>Title</p>
+          <p>Submit-time</p>
+        </div>
+        <div className={styles.horizontalLine}></div>
+        <div className={styles.questionsContainter}>
+          {questions &&
+            questions.map((item, index) => {
+              const isEven = index % 2 === 0;
+              const questionContainerClass = isEven
+                ? `${styles.questionContainer} ${styles.even}`
+                : styles.questionContainer;
+              return (
+                <Link
+                  key={item._id}
+                  href={`/question/${item.slug}`}
+                  className={styles.adminQuestions}
+                >
+                  <div className={questionContainerClass}>
+                    <div className="question-title">
+                      <h2>{item.Title}</h2>
+                    </div>
 
-        {questions &&
-          questions.map((item) => {
-            return (
-              <Link
-                key={item._id}
-                href={`/question/${item.slug}`}
-                className={styles.adminQuestions}
-              >
-                <div className={styles.questionContainer}>
-                  <div className="question-title">
-                    <h2>{item.Title}</h2>
+                    <div className="question-description">
+                      <p>{item.SubmitTime}</p>
+                    </div>
                   </div>
-
-                  <div className="question-description">
-                    <p>{item.QuestionText}</p>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })}
+        </div>
       </div>
     </div>
   );

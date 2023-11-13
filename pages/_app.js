@@ -2,6 +2,7 @@ import NavBar from "@/components/NavBar";
 import "@/styles/globals.css";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import NextNProgress from "nextjs-progressbar";
 import { useEffect, useState } from "react";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -27,6 +28,13 @@ export default function App({ Component, pageProps }) {
 
   return (
     <div>
+      <NextNProgress
+        color="#ffa500"
+        startPosition={0.3}
+        stopDelayMs={200}
+        height={4}
+        showOnShallow={true}
+      />
       <NavBar logout={logout} user={user} key={key} />
       <Component {...pageProps} />
     </div>

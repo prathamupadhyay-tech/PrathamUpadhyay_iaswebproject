@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import React from "react";
 import styles from "./QuestionForm.module.css";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const QuestionForm = () => {
@@ -25,10 +25,25 @@ const QuestionForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    if (name === "slug") {
+      // Apply slug format checks
+      const slugValue = value
+        .toLowerCase()
+        .replace(/[^a-z0-9_\-]/g, "")
+        .replace(/[-_]{2,}/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: slugValue,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -108,7 +123,7 @@ const QuestionForm = () => {
         setIsLoading(false);
         router.push("/Admin/AdminPage");
       } else {
-        const data = await res.json(); // Parse the response body as JSON
+        const data = await res.json();
         alert(
           "An error occurred. Please try again. Error message: " + data.message
         );
@@ -233,7 +248,7 @@ const QuestionForm = () => {
               <div className={styles.intputDiv}>
                 <div className={styles.labels}>Submit-time</div>
                 <input
-                  type="text"
+                  type="time"
                   name="SubmitTime"
                   value={formData.SubmitTime}
                   placeholder="Enter submit time"

@@ -11,22 +11,37 @@ const UserPage = ({ questions }) => {
         <div className={styles.questionHeadDiv}>
           <h1 className={styles.questionHead}>QUESTIONS</h1>
         </div>
+        <div className={styles.questionDesc}>
+          <p>Title</p>
+          <p>Submit-time</p>
+        </div>
+        <div className={styles.horizontalLine}></div>
+        <div className={styles.questionsContainter}>
+          {questions &&
+            questions.map((item, index) => {
+              const isEven = index % 2 === 0;
+              const questionContainerClass = isEven
+                ? `${styles.questionContainer} ${styles.even}`
+                : styles.questionContainer;
+              return (
+                <Link
+                  key={item._id}
+                  href={`/question/${item.slug}`}
+                  className={styles.adminQuestions}
+                >
+                  <div className={questionContainerClass}>
+                    <div className="question-title">
+                      <h2>{item.Title}</h2>
+                    </div>
 
-        {questions.map((item) => (
-          <Link
-            href={`/question/${item.slug}`}
-            key={item._id}
-            className={styles.questionContainer}
-          >
-            <div className="question-title">
-              <h2>{item.Title}</h2>
-            </div>
-
-            <div className="question-description">
-              <p>{item.QuestionText}</p>
-            </div>
-          </Link>
-        ))}
+                    <div className="question-description">
+                      <p>{item.SubmitTime}</p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+        </div>
       </div>
     </div>
   );

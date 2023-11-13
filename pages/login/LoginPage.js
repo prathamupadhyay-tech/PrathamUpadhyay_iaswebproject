@@ -5,7 +5,7 @@ import styles from "./LoginPage.module.css";
 import facebook from "./imgs/facebook.png";
 import github from "./imgs/github.png";
 import social from "./imgs/social.png";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Cookies from "js-cookie";
 const jwt = require("jsonwebtoken");
@@ -83,7 +83,7 @@ const LoginPage = () => {
             <div className={styles.inputDiv}>
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="Email (Dummy pratham@gmail.com)"
                 name="email"
                 value={userData.email}
                 onChange={handleInputChange}
@@ -94,7 +94,7 @@ const LoginPage = () => {
             <div className={styles.inputDiv}>
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Password (Dummy hello#12)"
                 name="password"
                 value={userData.password}
                 onChange={handleInputChange}
