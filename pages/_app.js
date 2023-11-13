@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
   const [user, setuser] = useState({ value: null });
   const [key, setkey] = useState(0);
-  
+
   const logout = (e) => {
     e.preventDefault();
 
@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }) {
     Cookies.remove("authToken");
     setkey(Math.random());
     setuser({ value: null });
-    router.push(`/`);
+    router.push(`${process.env.NEXT_PUBLIC_HOST}`);
   };
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }) {
   return (
     <div>
       <NavBar logout={logout} user={user} key={key} />
-      <Component {...pageProps} />
+      {/* <Component {...pageProps} /> */}
       hello
     </div>
   );
