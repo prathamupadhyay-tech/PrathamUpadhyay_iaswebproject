@@ -11,7 +11,7 @@ const UserPage = ({ questions }) => {
           <h1 className={styles.questionHead}>QUESTIONS</h1>
         </div>
 
-        {questions.map((item) => {
+        {questions && questions.map((item) => {
           return (
             <Link
               href={`/question/${item.slug}`}

@@ -19,7 +19,7 @@ const AdminPage = ({ questions }) => {
         </div>
         </div>
        
-        {questions.map((item) => {
+        {questions && questions.map((item) => {
           return (
             <Link
               key={item._id}
