@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
   const [user, setuser] = useState({ value: null });
   const [key, setkey] = useState(0);
-  const apiUrl = process.env.API_URL;
+  
   const logout = (e) => {
     e.preventDefault();
 
@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }) {
   return (
     <div>
       <NavBar logout={logout} user={user} key={key} />
-      {/* <Component {...pageProps} /> */}
+      <Component {...pageProps} />
       hello
     </div>
   );

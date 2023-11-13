@@ -40,9 +40,13 @@ const LoginPage = () => {
     } else if (userData && LoginCred) {
       if (userData.email === LoginCred.email) {
         if (userData.password === LoginCred.password) {
-          var token = jwt.sign({ email: userData.email }, "ThisIsASecret", {
-            expiresIn: "2d",
-          });
+          var token = jwt.sign(
+            { email: userData.email },
+            process.env.NEXT_PUBLIC_JWT_SECRET,
+            {
+              expiresIn: "2d",
+            }
+          );
           Cookies.set("authToken", token);
           localStorage.setItem("token", token);
           router.push("/Admin/AdminPage");

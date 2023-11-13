@@ -10,8 +10,6 @@ import question from "@/models/question";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home({ questions }) {
-
-  
   return (
     <>
       <Head>

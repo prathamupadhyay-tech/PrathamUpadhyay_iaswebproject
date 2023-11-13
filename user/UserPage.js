@@ -37,7 +37,7 @@ export async function getServerSideProps(context) {
   if (!mongoose.connections[0].readyState) {
     await mongoose.connect(process.env.MONGO_URI);
   }
-
+  
   let questions = await question.find();
 
   return {
