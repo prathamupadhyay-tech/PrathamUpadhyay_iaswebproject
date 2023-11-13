@@ -46,14 +46,21 @@ const AdminPage = ({ questions }) => {
 };
 
 export async function getServerSideProps(context) {
-  if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(process.env.MONGO_URI);
+  try {
+    if (!mongoose.connections[0].readyState) {
+      await mongoose.connect(process.env.MONGO_URI);
+    }
+
+    let questions = await question.find();
+
+    return {
+      props: { questions: JSON.parse(JSON.stringify(questions)) },
+    };
+  } catch (error) {
+    console.error("Error in getServerSideProps:", error);
+    return {
+      props: { questions: [] }, // Return an empty array or handle the error as needed
+    };
   }
-
-  let questions = await question.find();
-
-  return {
-    props: { questions: JSON.parse(JSON.stringify(questions)) },
-  };
 }
 export default AdminPage;

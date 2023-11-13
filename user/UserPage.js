@@ -3,6 +3,7 @@ import styles from "./UserPage.module.css";
 import mongoose from "mongoose";
 import question from "@/models/question";
 import Link from "next/link";
+
 const UserPage = ({ questions }) => {
   return (
     <div className={styles.all}>
@@ -11,38 +12,43 @@ const UserPage = ({ questions }) => {
           <h1 className={styles.questionHead}>QUESTIONS</h1>
         </div>
 
-        {questions && questions.map((item) => {
-          return (
-            <Link
-              href={`/question/${item.slug}`}
-              key={item._id}
-              className={styles.questionContainer}
-            >
-              <div className="question-title">
-                <h2>{item.Title}</h2>
-              </div>
+        {questions.map((item) => (
+          <Link
+            href={`/question/${item.slug}`}
+            key={item._id}
+            className={styles.questionContainer}
+          >
+            <div className="question-title">
+              <h2>{item.Title}</h2>
+            </div>
 
-              <div className="question-description">
-                <p>{item.QuestionText}</p>
-              </div>
-            </Link>
-          );
-        })}
+            <div className="question-description">
+              <p>{item.QuestionText}</p>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );
 };
 
-export async function getServerSideProps(context) {
-  if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(process.env.MONGO_URI);
-  }
-  
-  let questions = await question.find();
+export async function getServerSideProps() {
+  try {
+    if (mongoose.connections[0].readyState !== 1) {
+      await mongoose.connect(process.env.MONGO_URI);
+    }
 
-  return {
-    props: { questions: JSON.parse(JSON.stringify(questions)) },
-  };
+    const questions = await question.find();
+
+    return {
+      props: { questions: JSON.parse(JSON.stringify(questions)) },
+    };
+  } catch (error) {
+    console.error("Error in getServerSideProps:", error);
+    return {
+      props: { questions: [] },
+    };
+  }
 }
 
 export default UserPage;
