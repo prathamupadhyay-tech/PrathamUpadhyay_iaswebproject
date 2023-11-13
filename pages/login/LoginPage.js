@@ -49,7 +49,7 @@ const LoginPage = () => {
           );
           Cookies.set("authToken", token);
           localStorage.setItem("token", token);
-          router.push("/Admin/AdminPage");
+          window.location.href = "/Admin/AdminPage";
         } else {
           alert("wrong password");
         }
