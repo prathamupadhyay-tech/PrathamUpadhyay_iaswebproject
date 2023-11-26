@@ -1,0 +1,48 @@
+.mainTopperContainer{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border: 1px black solid;
+    flex-direction: column;
+}
+.TopperContainer{
+  display: flex;
+  gap: 1em;
+}
+
+.TopperProfileImgdiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.TopperDetailsMain{
+    display: flex;
+    flex-direction: column;
+    border: 1px black solid;
+    width: auto;
+    
+    gap: 0.5em;
+    padding: 1em;
+}
+.TopperDetailsMain:hover{
+    cursor: pointer;
+    background-color: rgb(241, 241, 241);
+}
+.TopperName{
+    font-size: 1.2em;
+}
+.TopperDetailsDivs{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.TopperDetailsDivs1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+

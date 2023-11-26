@@ -44,6 +44,9 @@ const NavBar = ({ logout, user }) => {
           <div className={styles.navEle}>
             <Link href={`/Admin/AdminPage`}>Add Questions</Link>
           </div>
+          <div className={styles.navEle}>
+            <Link href={"/Admin/Toppers"}>Add Topper</Link>
+          </div>
           {user.value && (
             <button onClick={logout} className={styles.loginBtn}>
               Logout
@@ -70,6 +73,9 @@ const NavBar = ({ logout, user }) => {
                 </div>
                 <div className={styles.navEle}>
                   <Link href={`/Admin/AdminPage`}>Add Questions</Link>
+                </div>
+                <div className={styles.navEle}>
+                  <Link href={"/Admin/Toppers"}>Add Topper</Link>
                 </div>
               </>
             )}
