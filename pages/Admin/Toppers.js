@@ -3,8 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./Topper.module.css";
 import topper from "@/models/topper";
+import { useState } from "react";
 import mongoose from "mongoose";
+import TopperCard from "@/components/TopperCard";
 const Toppers = ({ toppers }) => {
+  const [selectedTopper, setSelectedTopper] = useState(null);
+
+  const handleTopperClick = (data) => {
+    setSelectedTopper(data);
+  };
   return (
     <div>
       <div className={styles.mainTopperContainer}>
@@ -45,73 +52,23 @@ const Toppers = ({ toppers }) => {
                         {data.year}
                       </div>
                     </div>
-                    {/* <div className={styles.TopperRemarks}>
-                <label htmlFor="">Remark:</label>
-
-                <div>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Eaque possimus minima modi quidem vero reprehenderit quisquam
-                  repellat ipsum ut explicabo.
-                </div>
-              </div> */}
+                    <div className={styles.viewProfile}>
+                      <button onClick={() => handleTopperClick(data)}>
+                        {" "}
+                        View Profile
+                      </button>
+                    </div>
                   </div>
-                  {/* <div
-              className={`${styles.TopperDetails2} ${styles.TopperDetailsMain}`}
-            >
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Gs1 marks:</label>
-                <div>200</div>
-              </div>
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Gs2 marks:</label>
-                <div>200</div>
-              </div>
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Gs3 marks:</label>
-                <div>200</div>
-              </div>
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Gs4 marks:</label>
-                <div>200</div>
-              </div>
-            </div>
-            <div
-              className={`${styles.TopperDetails3} ${styles.TopperDetailsMain}`}
-            >
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Eassy marks:</label>
-                <div>200</div>
-              </div>
-
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Prelims Score gs:</label>
-                <div>200</div>
-              </div>
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Prelims Score csat:</label>
-                <div>200</div>
-              </div>
-            </div>
-            <div
-              className={`${styles.TopperDetails4} ${styles.TopperDetailsMain}`}
-            >
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Optional Subject:</label>
-                <div>Economyy</div>
-              </div>
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Optional 1 marks:</label>
-                <div>200</div>
-              </div>
-              <div className={styles.TopperDetailsDivs}>
-                <label htmlFor="">Optional 2 marks:</label>
-                <div>200</div>
-              </div>
-            </div> */}
                 </div>
               );
             })}
-        </div>
+        </div>{" "}
+        {selectedTopper && (
+          <TopperCard
+            topperData={selectedTopper}
+            onClose={() => setSelectedTopper(null)}
+          />
+        )}
       </div>
     </div>
   );

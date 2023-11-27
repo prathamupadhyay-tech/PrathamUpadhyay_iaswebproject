@@ -189,7 +189,6 @@ const TopperForm = () => {
                   type="number"
                   name="prelimsScoreGs"
                   value={formData.prelimsScoreGs}
-                  placeholder="Enter any url"
                   onChange={handleInputChange}
                 />
               </div>
@@ -208,7 +207,6 @@ const TopperForm = () => {
                   type="text"
                   name="optionalSub"
                   value={formData.optionalSub}
-                  placeholder="Enter subject"
                   onChange={handleInputChange}
                 />
               </div>
