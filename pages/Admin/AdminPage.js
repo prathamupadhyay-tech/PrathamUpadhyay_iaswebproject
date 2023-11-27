@@ -67,7 +67,7 @@ export async function getServerSideProps(context) {
   } catch (error) {
     console.error("Error in getServerSideProps:", error);
     return {
-      props: { questions: [] }, // Return an empty array or handle the error as needed
+      props: { questions: [] },
     };
   }
 }
