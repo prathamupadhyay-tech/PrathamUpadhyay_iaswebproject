@@ -18,7 +18,7 @@ const Toppers = ({ toppers }) => {
           {toppers &&
             toppers.map((data, index) => {
               return (
-                <div className={styles.TopperDetails}>
+                <div key={index} className={styles.TopperDetails}>
                   <div
                     className={`${styles.TopperDetails1} ${styles.TopperDetailsMain}`}
                   >
