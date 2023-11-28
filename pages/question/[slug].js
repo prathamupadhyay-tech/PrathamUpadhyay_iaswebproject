@@ -112,14 +112,14 @@ export async function getServerSideProps(context) {
     if (currentQuestionIndex > 0) {
       prevQuestion = allQuestions[currentQuestionIndex - 1];
     } else {
-      // If the current question is the first one, set prevQuestion to the last question.
+     
       prevQuestion = allQuestions[totalQuestions - 1];
     }
 
     if (currentQuestionIndex < totalQuestions - 1) {
       nextQuestion = allQuestions[currentQuestionIndex + 1];
     } else {
-      // If the current question is the last one, set nextQuestion to the first question.
+    
       nextQuestion = allQuestions[0];
     }
   }

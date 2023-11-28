@@ -1,13 +1,16 @@
 import React from "react";
-import styles from "./TopperCard.module.css";
+import styles from "./[topperId].module.css";
+import Link from "next/link";
+import mongoose from "mongoose";
+import { useRouter } from "next/router";
+import topper from "@/models/topper";
 import Image from "next/image";
-const TopperCard = ({ topperData, onClose }) => {
+const TopperCard = ({ toppers }) => {
+  const router = useRouter();
+  const { topperId } = router.query;
+  console.log(topperId);
   return (
     <div className={styles.TopperTopContainer}>
-      <div className={styles.Cross} onClick={onClose}>
-        <div className={styles.Cross1}></div>
-        <div className={styles.Cross2}></div>
-      </div>
       <div className={styles.TopperCardMainContainer}>
         <div className={styles.TopperDetails}>
           <div
@@ -33,12 +36,12 @@ const TopperCard = ({ topperData, onClose }) => {
             </div>
             <div className={styles.TopperDetailsDivs}>
               <label htmlFor="">Username</label>
-              <div className={styles.TopperName}>{topperData.name}</div>
+              <div className={styles.TopperName}>{toppers.name}</div>
             </div>
 
             <div className={styles.TopperDetailsDivs}>
               <label htmlFor="">Optional Subject</label>
-              <div className={styles.TopperSub}>{topperData.optionalSub}</div>
+              <div className={styles.TopperSub}>{toppers.optionalSub}</div>
             </div>
           </div>
 
@@ -56,19 +59,19 @@ const TopperCard = ({ topperData, onClose }) => {
             <div className={styles.TopperGsContainer}>
               <div className={styles.GsMarksDiv}>
                 <h2>Gs 1</h2>
-                <div>{topperData.gs1marks}</div>
+                <div>{toppers.gs1marks}</div>
               </div>
               <div className={styles.GsMarksDiv}>
                 <h2>Gs 2</h2>
-                <div>{topperData.gs2marks}</div>
+                <div>{toppers.gs2marks}</div>
               </div>
               <div className={styles.GsMarksDiv}>
                 <h2>Gs 3</h2>
-                <div>{topperData.gs3marks}</div>
+                <div>{toppers.gs3marks}</div>
               </div>
               <div className={styles.GsMarksDivLast}>
                 <h2>Gs 4</h2>
-                <div>{topperData.gs4marks}</div>
+                <div>{toppers.gs4marks}</div>
               </div>
             </div>
           </div>
@@ -85,7 +88,7 @@ const TopperCard = ({ topperData, onClose }) => {
             </div>
             <div className={styles.TopperRemark}>
               <h2>Remarks</h2>
-              <p>{topperData.Remarks}</p>
+              <p>{toppers.Remarks}</p>
             </div>
           </div>
         </div>
@@ -105,29 +108,53 @@ const TopperCard = ({ topperData, onClose }) => {
           <div className={styles.scoresDiv}>
             <div className={styles.Scores}>
               <h2>Essay Marks</h2>
-              <div>{topperData.essayMarks}</div>
+              <div>{toppers.essayMarks}</div>
             </div>
             <div className={styles.preliemsGs}>
               <h2>Prelims score gs</h2>
-              <div>{topperData.prelimsScoreGs}</div>
+              <div>{toppers.prelimsScoreGs}</div>
             </div>
             <div className={styles.Scores}>
               <h2>Prelims score csat</h2>
-              <div>{topperData.prelimsScoreCsat}</div>
+              <div>{toppers.prelimsScoreCsat}</div>
             </div>
             <div className={styles.Optional1}>
               <h2>Optional 1 marks</h2>
-              <div>{topperData.optional1Marks}</div>
+              <div>{toppers.optional1Marks}</div>
             </div>
             <div className={styles.Scores}>
               <h2>Optional 2 marks</h2>
-              <div>{topperData.optional2Marks}</div>
+              <div>{toppers.optional2Marks}</div>
             </div>
+          </div>
+
+          <div className={styles.TopperShowAnswersBtn}>
+            <Link href={`/Topper/${topperId}/Answer/TopperAnswers`}>
+              <div>Answers</div>
+            </Link>
           </div>
         </div>
       </div>
     </div>
   );
 };
+export async function getServerSideProps(context) {
+  try {
+    if (!mongoose.connections[0].readyState) {
+      await mongoose.connect(process.env.MONGO_URI);
+    }
+    const { topperId } = context.query;
+    const [name, rank, year] = topperId.split("-");
+    const toppers = await topper.findOne({ name, rank, year });
 
+    return {
+      props: { toppers: JSON.parse(JSON.stringify(toppers)) },
+    };
+  } catch (error) {
+    console.error("Error in getServerSideProps:", error);
+    return {
+      props: { toppers: "" },
+    };
+  }
+}
 export default TopperCard;

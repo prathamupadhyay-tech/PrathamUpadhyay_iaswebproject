@@ -3,10 +3,9 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh;
-    position: fixed;
-    top: 0%;
-    background-color: rgba(0, 0, 0, 0.307);
+    height: 90vh;
+  
+    
 }
 .editIcon{
     opacity: 0.4;
@@ -241,6 +240,27 @@
     border-bottom: 1px rgb(210, 210, 210) solid;
     
 }
+.TopperShowAnswersBtn{
+    display: flex;
+    
+    align-items: center;
+    height: 100%;
+}
+.TopperShowAnswersBtn>div{
+    padding: 0.4em 1em;
+    font-size: 1.2em;
+   
+    background-color: rgb(98, 174, 255);
+    border-radius: 0.3em;
+  
+}
+.TopperShowAnswersBtn>div:hover{
+    cursor: pointer;
+    background-color: rgba(98, 174, 255, 0.585);
+    
+  
+}
+
 /* cross */
 .Cross{
     position: fixed;

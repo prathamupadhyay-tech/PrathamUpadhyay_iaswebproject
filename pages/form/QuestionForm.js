@@ -27,7 +27,7 @@ const QuestionForm = () => {
     const { name, value } = e.target;
 
     if (name === "slug") {
-      // Apply slug format checks
+   
       const slugValue = value
         .toLowerCase()
         .replace(/[^a-z0-9_\-]/g, "")
@@ -45,6 +45,7 @@ const QuestionForm = () => {
       }));
     }
   };
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
 

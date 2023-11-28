@@ -73,6 +73,17 @@
     font-size: 1.1em;
     width: 20em;
 }
+.inputDivInner{
+    width: 70%;
+    position: relative;
+}
+.inputDivInner>input{
+    padding: 0.2em;
+    border: none;
+    border-radius: 0.4em;
+    font-size: 1.1em;
+    width: 100%;
+}
 @media (max-width: 600px) {
     .intputDiv>textarea{
        

@@ -1,0 +1,56 @@
+.MainAnswersContainer{
+    display: flex;
+    margin-top: 2em;
+    align-items: center;
+    gap: 1em;
+    flex-direction: column;
+}
+.AnswersContainerHeading{
+    width: 60%;
+    color: gray;
+}
+.AnswersHeadingDiv{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr );
+    
+
+}
+.AnswersHeadingDiv>div{
+    padding: 0.5em 0.5em;
+    min-width: 5em;
+    border-bottom: 1px rgb(201, 201, 201) solid;
+
+}
+.AnswersHeadingDiv>div>h2{
+    font-weight: 600;
+    font-size: 1.2em;
+}
+.AnswersDiv{
+
+   
+    width: 60%;
+}
+.Answers{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr );
+    
+}
+.Answers>div{
+    color: gray;
+    min-width: 5em;
+    padding: 0.5em 0.5em;
+    border-bottom: 1px rgb(105, 105, 105) solid;
+}
+.viewAnswerBtn>button{
+    padding: 0.2em 1em;
+
+    color:  white;
+    border: none;
+    border-radius: 0.3em;
+    background-color: rgb(93, 166, 255);
+}
+.viewAnswerBtn>button:hover{
+    cursor: pointer;
+    background-color: rgba(93, 166, 255, 0.568);
+
+}

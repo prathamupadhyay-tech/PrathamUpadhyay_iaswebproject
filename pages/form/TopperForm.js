@@ -30,30 +30,34 @@ const TopperForm = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "slug") {
-      // Apply slug format checks
-      const slugValue = value
-        .toLowerCase()
-        .replace(/[^a-z0-9_\-]/g, "")
-        .replace(/[-_]{2,}/g, "-")
-        .replace(/^-+|-+$/g, "");
-
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: slugValue,
-      }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+    // if (
+    //   formData.name ||
+    //   formData.Remarks ||
+    //   formData.rank ||
+    //   formData.gs1marks ||
+    //   formData.gs2marks ||
+    //   formData.gs3marks ||
+    //   formData.gs4marks ||
+    //   formData.essayMarks ||
+    //   formData.year ||
+    //   formData.optional1Marks ||
+    //   formData.optional2Marks ||
+    //   formData.optionalSub ||
+    //   formData.prelimsScoreGs ||
+    //   formData.prelimsScoreCsat
+    // ) {
+    //   alert("There is a field missing please fill all the details!");
+    //   return;
+    // }
     const question = {
       name: formData.name,
       rank: formData.rank,
@@ -80,7 +84,7 @@ const TopperForm = () => {
 
       if (res.status === 200) {
         setIsLoading(false);
-        router.push("/Admin/AdminPage");
+        router.push("/Admin/Toppers");
       } else {
         const data = await res.json();
         alert(
