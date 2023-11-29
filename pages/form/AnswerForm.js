@@ -54,23 +54,25 @@ const AnswerForm = () => {
 
   const fetchSearchResults = async (fieldName) => {
     try {
-      const response = await axios.get(
-        `/api/searchQuestion?type=${fieldName}&value=${formData[fieldName]}`
-      );
-      if (fieldName === "paper") {
-        setShowPaperOptions(true);
+      if (formData.paper || formData.topicName || formData.subtopicName) {
+        const response = await axios.get(
+          `/api/searchQuestion?type=${fieldName}&value=${formData[fieldName]}`
+        );
+        if (fieldName === "paper") {
+          setShowPaperOptions(true);
 
-        setSearchResultsPaper(response.data);
-      } else if (fieldName === "topicName") {
-        setShowTopicOptions(true);
+          setSearchResultsPaper(response.data);
+        } else if (fieldName === "topicName") {
+          setShowTopicOptions(true);
 
-        setSearchResultsTopic(response.data);
-      } else if (fieldName === "subtopicName") {
-        setShowSubTopicOptions(true);
-        setSearchResultsSubTopic(response.data);
+          setSearchResultsTopic(response.data);
+        } else if (fieldName === "subtopicName") {
+          setShowSubTopicOptions(true);
+          setSearchResultsSubTopic(response.data);
+        }
+
+        console.log(response);
       }
-
-      console.log(response);
     } catch (error) {
       console.error(`Error fetching ${fieldName} search results:`, error);
     }

@@ -38,7 +38,7 @@ const TopperAnswers = ({ toppers, answers }) => {
         </div>
         {answers.map((data, index) => {
           return (
-            <div className={styles.Answers}>
+            <div key={index} className={styles.Answers}>
               <div>{data.testCode}</div>
               <div>{data.questionNumber}</div>
               <div>{data.writtenBy.name}</div>
