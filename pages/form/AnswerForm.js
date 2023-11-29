@@ -36,6 +36,10 @@ const AnswerForm = () => {
   const [showTopicOptions, setShowTopicOptions] = useState(false);
   const [showSubTopicOptions, setShowSubTopicOptions] = useState(false);
 
+  const [paperFieldDis, setPaperFieldDis] = useState(false);
+  const [topicFieldDis, setTopicFieldDis] = useState(false);
+  const [subTopicFieldDis, setSubTopicFieldDis] = useState(false);
+
   const paperInputRef = useRef(null);
   const topicInputRef = useRef(null);
   const subTopicInputRef = useRef(null);
@@ -54,7 +58,7 @@ const AnswerForm = () => {
 
   const fetchSearchResults = async (fieldName) => {
     try {
-      if (formData.paper || formData.topicName || formData.subtopicName) {
+      if (formData.paper !== "" || formData.testCode !== "") {
         const response = await axios.get(
           `/api/searchQuestion?type=${fieldName}&value=${formData[fieldName]}`
         );
@@ -62,13 +66,6 @@ const AnswerForm = () => {
           setShowPaperOptions(true);
 
           setSearchResultsPaper(response.data);
-        } else if (fieldName === "topicName") {
-          setShowTopicOptions(true);
-
-          setSearchResultsTopic(response.data);
-        } else if (fieldName === "subtopicName") {
-          setShowSubTopicOptions(true);
-          setSearchResultsSubTopic(response.data);
         }
 
         console.log(response);
@@ -80,28 +77,18 @@ const AnswerForm = () => {
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
-      fetchSearchResults("topicName");
-    }, 300);
-
-    return () => clearTimeout(debounceTimer);
-  }, [formData.topicName]);
-
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      fetchSearchResults("subtopicName");
-    }, 300);
-
-    return () => clearTimeout(debounceTimer);
-  }, [formData.subtopicName]);
-
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
       fetchSearchResults("paper");
     }, 300);
 
     return () => clearTimeout(debounceTimer);
   }, [formData.paper]);
 
+  useEffect(() => {
+    setSearchResultsTopic(true);
+  }, [formData.topicName]);
+  useEffect(() => {
+    setSearchResultsSubTopic(true);
+  }, [formData.subtopicName]);
   //   This is getting all the users for adding the writtenBy field
   useEffect(() => {
     const fetchUsers = async () => {
@@ -124,12 +111,38 @@ const AnswerForm = () => {
     return () => clearTimeout(debounceTimer);
   }, [formData.testCode]);
 
-  const handleSelect = (fieldName, result) => {
+  const handleSelect = async (fieldName, result) => {
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: result.name,
       [`${fieldName}Id`]: result._id,
     }));
+
+    if (fieldName === "paper") {
+      setPaperFieldDis(true);
+      try {
+        const response = await axios.get(
+          `/api/getTopics?paperId=${result._id}`
+        );
+
+        setSearchResultsTopic(response.data);
+      } catch (error) {
+        console.error(`Error fetching topics for the selected paper:`, error);
+      }
+    } else if (fieldName === "topicName") {
+      setTopicFieldDis(true);
+      try {
+        const response = await axios.get(
+          `/api/getSubTopics?topicId=${result._id}`
+        );
+
+        setSearchResultsSubTopic(response.data);
+      } catch (error) {
+        console.error(`Error fetching topics for the selected paper:`, error);
+      }
+    } else if (fieldName === "subtopicName") {
+      setSubTopicFieldDis(true);
+    }
 
     if (fieldName === "paper") setShowPaperOptions(false);
     else if (fieldName === "topicName") setShowTopicOptions(false);
@@ -193,8 +206,8 @@ const AnswerForm = () => {
       topicName: formData.topicName,
       subtopicName: formData.subtopicName,
       paperId: formData.paperId,
-      topicNameId: formData.topicNameId,
-      subtopicNameId: formData.subtopicNameId,
+      topicId: formData.topicNameId,
+      subTopicId: formData.subtopicNameId,
     };
 
     try {
@@ -230,6 +243,32 @@ const AnswerForm = () => {
     }));
   };
 
+  const clearField = (fieldName) => {
+    if (fieldName === "paper") {
+      setPaperFieldDis(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        paperId: "",
+        paper: "",
+      }));
+    }
+    if (fieldName === "topicName") {
+      setTopicFieldDis(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        topicNameId: "",
+        topicName: "",
+      }));
+    }
+    if (fieldName === "subtopicName") {
+      setSubTopicFieldDis(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        subtopicName: "",
+        subtopicNameId: "",
+      }));
+    }
+  };
   const handleImageUpload = async (e) => {
     const files = e.target.files;
     console.log(formData.answerImages);
@@ -401,24 +440,31 @@ const AnswerForm = () => {
                     ref={paperInputRef}
                     type="text"
                     name="paper"
+                    disabled={paperFieldDis}
                     value={formData.paper}
                     onChange={handleInputChange}
                   />
-                  {showPaperOptions &&
-                    formData.paper &&
-                    searchResultsPaper.length > 0 && (
-                      <div className={styles2.optionsContainer}>
-                        {searchResultsPaper.slice(0, 5).map((result) => (
-                          <div
-                            onClick={() => handleSelect("paper", result)}
-                            key={result._id}
-                            className={styles2.option}
-                          >
-                            {result.name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                  <div
+                    onClick={() => {
+                      clearField("paper");
+                    }}
+                  >
+                    Clear
+                  </div>
+
+                  {showPaperOptions && searchResultsPaper.length > 0 && (
+                    <div className={styles2.optionsContainer}>
+                      {searchResultsPaper.slice(0, 5).map((result) => (
+                        <div
+                          onClick={() => handleSelect("paper", result)}
+                          key={result._id}
+                          className={styles2.option}
+                        >
+                          {result.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -432,24 +478,30 @@ const AnswerForm = () => {
                     ref={topicInputRef}
                     type="text"
                     name="topicName"
+                    disabled={topicFieldDis}
                     value={formData.topicName}
                     onChange={handleInputChange}
-                  />
-                  {showTopicOptions &&
-                    formData.topicName &&
-                    searchResultsTopic.length > 0 && (
-                      <div className={styles2.optionsContainer}>
-                        {searchResultsTopic.slice(0, 5).map((result) => (
-                          <div
-                            onClick={() => handleSelect("topicName", result)}
-                            key={result._id}
-                            className={styles2.option}
-                          >
-                            {result.name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                  />{" "}
+                  <div
+                    onClick={() => {
+                      clearField("topicName");
+                    }}
+                  >
+                    Clear
+                  </div>
+                  {searchResultsTopic.length > 0 && (
+                    <div className={styles2.optionsContainer}>
+                      {searchResultsTopic.slice(0, 5).map((result) => (
+                        <div
+                          onClick={() => handleSelect("topicName", result)}
+                          key={result._id}
+                          className={styles2.option}
+                        >
+                          {result.name}{" "}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className={styles.intputDiv}>
@@ -460,24 +512,30 @@ const AnswerForm = () => {
                     ref={subTopicInputRef}
                     type="text"
                     name="subtopicName"
+                    disabled={subTopicFieldDis}
                     value={formData.subtopicName}
                     onChange={handleInputChange}
-                  />
-                  {showSubTopicOptions &&
-                    formData.subtopicName &&
-                    searchResultsSubTopic.length > 0 && (
-                      <div className={styles2.optionsContainer}>
-                        {searchResultsSubTopic.slice(0, 5).map((result) => (
-                          <div
-                            onClick={() => handleSelect("subtopicName", result)}
-                            key={result._id}
-                            className={styles2.option}
-                          >
-                            {result.name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                  />{" "}
+                  <div
+                    onClick={() => {
+                      clearField("subtopicName");
+                    }}
+                  >
+                    Clear
+                  </div>
+                  {searchResultsSubTopic.length > 0 && (
+                    <div className={styles2.optionsContainer}>
+                      {searchResultsSubTopic.slice(0, 5).map((result) => (
+                        <div
+                          onClick={() => handleSelect("subtopicName", result)}
+                          key={result._id}
+                          className={styles2.option}
+                        >
+                          {result.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

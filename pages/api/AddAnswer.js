@@ -1,35 +1,64 @@
 import Answer from "@/models/answer";
-import Paper from "@/models/paper"; // Import the Paper model
-import Topic from "@/models/topic"; // Import the Topic model
-import Subtopic from "@/models/subtopic"; // Import the Subtopic model
+import Paper from "@/models/paper";
+import Topic from "@/models/topic";
+import Subtopic from "@/models/subtopic";
 import connectDb from "@/middleware/mongoose";
 import mongoose from "mongoose";
+import topic from "@/models/topic";
+import subtopic from "@/models/subtopic";
 const handler = async (req, res) => {
   if (req.method == "POST") {
-    let papId, topicId, subtopicId;
+    let papId;
 
     if (req.body.paperId === "") {
-      const newPaper = new Paper({ name: req.body.paper });
+      const newSubTopic = new subtopic({ name: req.body.subtopicName });
+      await newSubTopic.save();
+      let subtopicId = newSubTopic._id;
+      const newTopic = new topic({
+        name: req.body.topicName,
+        subTopic: [subtopicId],
+      });
+      await newTopic.save();
+      let topicId = newTopic._id;
+      const newPaper = new Paper({
+        name: req.body.paper,
+        paperTopics: [topicId],
+      });
       await newPaper.save();
       papId = newPaper._id;
+    } else if (req.body.paperId && req.body.topicId === "") {
+      papId = req.body.paperId;
+      const newSubTopic = new subtopic({ name: req.body.subtopicName });
+      await newSubTopic.save();
+      let subtopicId = newSubTopic._id;
+      const newTopic = new topic({
+        name: req.body.topicName,
+        subTopic: [subtopicId],
+      });
+      await newTopic.save();
+      let topicId = newTopic._id;
+
+      await Paper.findByIdAndUpdate(papId, {
+        $push: { paperTopics: topicId },
+      }).exec();
+    } else if (
+      req.body.paperId &&
+      req.body.topicId &&
+      req.body.subTopicId === ""
+    ) {
+      papId = req.body.paperId;
+      let topicId = req.body.topicId;
+      const newSubTopic = new subtopic({ name: req.body.subtopicName });
+      await newSubTopic.save();
+      let subtopicId = newSubTopic._id;
+
+      await topic
+        .findByIdAndUpdate(topicId, {
+          $push: { subTopic: subtopicId },
+        })
+        .exec();
     } else {
       papId = req.body.paperId;
-    }
-
-    if (req.body.topicNameId === "") {
-      const newTopic = new Topic({ name: req.body.topicName });
-      await newTopic.save();
-      topicId = newTopic._id;
-    } else {
-      topicId = req.body.topicNameId;
-    }
-
-    if (req.body.subtopicNameId === "") {
-      const newSubtopic = new Subtopic({ name: req.body.subtopicName });
-      await newSubtopic.save();
-      subtopicId = newSubtopic._id;
-    } else {
-      subtopicId = req.body.subtopicNameId;
     }
 
     console.log(req.body.testCode);
@@ -41,8 +70,6 @@ const handler = async (req, res) => {
       answerImages: req.body.answerImages,
       writtenBy: req.body.writtenBy,
       paper: papId,
-      topicName: topicId,
-      subtopicName: subtopicId,
     });
 
     await q.save();

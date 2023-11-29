@@ -8,7 +8,7 @@ import Image from "next/image";
 const TopperCard = ({ toppers }) => {
   const router = useRouter();
   const { topperId } = router.query;
-  console.log(topperId);
+  
   return (
     <div className={styles.TopperTopContainer}>
       <div className={styles.TopperCardMainContainer}>

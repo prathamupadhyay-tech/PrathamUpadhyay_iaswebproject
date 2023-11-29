@@ -45,9 +45,16 @@ const TopperAnswers = ({ toppers, answers }) => {
 
               <div>{data.paper.name}</div>
 
-              <div>{data.topicName.name}</div>
+              {data.paper.paperTopics.map((topic, topicIndex) => (
+                <div key={topicIndex}>
+                  <div>{topic.name}</div>
 
-              <div>{data.subtopicName.name}</div>
+                  {/* Accessing subtopic details */}
+                  {topic.subTopic.map((subtopic, subtopicIndex) => (
+                    <div key={subtopicIndex}>{subtopic.name}</div>
+                  ))}
+                </div>
+              ))}
               <div className={styles.viewAnswerBtn}>
                 <button>View</button>
               </div>
@@ -69,9 +76,15 @@ export async function getServerSideProps(context) {
     const toppers = await topper.findOne({ name, rank, year });
     const answers = await answer
       .find({ writtenBy: toppers._id })
-      .populate("paper")
-      .populate("topicName")
-      .populate("subtopicName")
+      .populate({
+        path: "paper",
+        populate: {
+          path: "paperTopics",
+          populate: {
+            path: "subTopic",
+          },
+        },
+      })
       .populate("writtenBy");
 
     return {

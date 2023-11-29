@@ -32,16 +32,7 @@ const answerSchema = new mongoose.Schema({
     ref: "Paper",
     required: true,
   },
-  topicName: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Topic",
-    required: true,
-  },
-  subtopicName: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Subtopic",
-    required: true,
-  },
+
 });
 mongoose.models = {};
 export default mongoose.model("Answer", answerSchema);

@@ -34,20 +34,7 @@ const handler = async (req, res) => {
           .limit(5);
         console.log(results);
         break;
-      case "topicName":
-        results = await topic
-          .find({
-            name: new RegExp(`^${value}`, "i"),
-          })
-          .limit(5);
-        break;
-      case "subtopicName":
-        results = await subtopic
-          .find({
-            name: new RegExp(`^${value}`, "i"),
-          })
-          .limit(5);
-        break;
+
       default:
         return res.status(400).json({ message: "Invalid search field" });
     }
