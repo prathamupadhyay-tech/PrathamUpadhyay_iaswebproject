@@ -6,5 +6,6 @@ const topicSchema = new mongoose.Schema({
     }
 
 });
+
 mongoose.models = {};
 export default mongoose.model("Topic", topicSchema);
