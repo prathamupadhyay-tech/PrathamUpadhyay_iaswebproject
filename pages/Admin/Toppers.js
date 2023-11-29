@@ -75,12 +75,6 @@ const Toppers = ({ toppers }) => {
                 );
               })}
           </div>{" "}
-          {selectedTopper && (
-            <TopperCard
-              topperData={selectedTopper}
-              onClose={() => setSelectedTopper(null)}
-            />
-          )}
         </div>
       </div>
     </div>
