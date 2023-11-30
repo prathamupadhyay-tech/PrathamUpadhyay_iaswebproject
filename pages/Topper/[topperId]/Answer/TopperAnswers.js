@@ -41,7 +41,7 @@ const TopperAnswers = ({ toppers, answers }) => {
             <div key={index} className={styles.Answers}>
               <div>{data.testCode}</div>
               <div>{data.questionNumber}</div>
-              <div>{data.writtenBy.name}</div>
+              <div>{toppers.name}</div>
 
               <div>{data.paper.name}</div>
 
@@ -49,9 +49,11 @@ const TopperAnswers = ({ toppers, answers }) => {
                 <>
                   <div>{topic.name}</div>
 
-                  {topic.subTopic.map((subtopic, subtopicIndex) => (
-                    <div key={subtopicIndex}>{subtopic.name}</div>
-                  ))}
+                  <div>
+                    {topic.subTopic.map((subtopic, subtopicIndex) => (
+                      <div key={subtopicIndex}>{subtopic.name}</div>
+                    ))}
+                  </div>
                 </>
               ))}
               <div className={styles.viewAnswerBtn}>
@@ -99,8 +101,6 @@ export async function getServerSideProps(context) {
         },
       })
       .exec();
-
-    console.log("year:", toppers);
 
     const answers = toppers ? toppers.Answers : [];
 
