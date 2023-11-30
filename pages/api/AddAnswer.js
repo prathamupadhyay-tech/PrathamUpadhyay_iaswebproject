@@ -6,6 +6,7 @@ import connectDb from "@/middleware/mongoose";
 import mongoose from "mongoose";
 import topic from "@/models/topic";
 import subtopic from "@/models/subtopic";
+import topper from "@/models/topper";
 const handler = async (req, res) => {
   if (req.method == "POST") {
     let papId;
@@ -73,6 +74,12 @@ const handler = async (req, res) => {
     });
 
     await q.save();
+
+    await topper.findByIdAndUpdate(req.body.writtenBy, {
+      $push: { Answers: q._id },
+    });
+    
+
     res.status(200).json({ message: "success" });
   } else {
     res.status(400).json({ message: "bad request" });

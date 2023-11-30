@@ -46,14 +46,13 @@ const TopperAnswers = ({ toppers, answers }) => {
               <div>{data.paper.name}</div>
 
               {data.paper.paperTopics.map((topic, topicIndex) => (
-                <div key={topicIndex}>
+                <>
                   <div>{topic.name}</div>
 
-                  {/* Accessing subtopic details */}
                   {topic.subTopic.map((subtopic, subtopicIndex) => (
                     <div key={subtopicIndex}>{subtopic.name}</div>
                   ))}
-                </div>
+                </>
               ))}
               <div className={styles.viewAnswerBtn}>
                 <button>View</button>
@@ -81,24 +80,29 @@ export async function getServerSideProps(context) {
     console.log("name:", name);
     console.log("rank:", parsedRank);
     console.log("year:", parsedYear);
-    const toppers = await topper.findOne({
-      name,
-      rank: parsedRank,
-      year: parsedYear,
-    });
-    console.log("year:", toppers);
-    const answers = await answer
-      .find({ writtenBy: toppers._id })
+    const toppers = await topper
+      .findOne({
+        name,
+        rank: parsedRank,
+        year: parsedYear,
+      })
       .populate({
-        path: "paper",
+        path: "Answers",
         populate: {
-          path: "paperTopics",
+          path: "paper",
           populate: {
-            path: "subTopic",
+            path: "paperTopics",
+            populate: {
+              path: "subTopic",
+            },
           },
         },
       })
-      .populate("writtenBy");
+      .exec();
+
+    console.log("year:", toppers);
+
+    const answers = toppers ? toppers.Answers : [];
 
     return {
       props: {

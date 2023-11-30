@@ -59,6 +59,12 @@ const topperSchema = new mongoose.Schema({
   Remarks: {
     type: String,
   },
+  Answers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Answer",
+    },
+  ],
 });
 mongoose.models = {};
 export default mongoose.model("Topper", topperSchema);
