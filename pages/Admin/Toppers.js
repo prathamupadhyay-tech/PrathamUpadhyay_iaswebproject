@@ -89,7 +89,9 @@ export async function getServerSideProps(context) {
     let toppers = await topper.find();
 
     const slugs = toppers.map((data) => {
-      const slug = `${data.name}-${data.rank}-${data.year}`;
+      const slug = `${data.name.replace(/\s/g, "-")}-rank-${data.rank}-${
+        data.year
+      }`;
       return { ...data, slug };
     });
     console.log(slugs);

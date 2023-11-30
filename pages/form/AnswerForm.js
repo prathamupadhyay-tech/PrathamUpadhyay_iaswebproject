@@ -47,48 +47,12 @@ const AnswerForm = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    console.log(e.target.value);
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  //   fetching search result for
-
-  const fetchSearchResults = async (fieldName) => {
-    try {
-      if (formData.paper !== "" || formData.testCode !== "") {
-        const response = await axios.get(
-          `/api/searchQuestion?type=${fieldName}&value=${formData[fieldName]}`
-        );
-        if (fieldName === "paper") {
-          setShowPaperOptions(true);
-
-          setSearchResultsPaper(response.data);
-        }
-
-        console.log(response);
-      }
-    } catch (error) {
-      console.error(`Error fetching ${fieldName} search results:`, error);
-    }
-  };
-
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      fetchSearchResults("paper");
-    }, 300);
-
-    return () => clearTimeout(debounceTimer);
-  }, [formData.paper]);
-
-  useEffect(() => {
-    setSearchResultsTopic(true);
-  }, [formData.topicName]);
-  useEffect(() => {
-    setSearchResultsSubTopic(true);
-  }, [formData.subtopicName]);
   //   This is getting all the users for adding the writtenBy field
   useEffect(() => {
     const fetchUsers = async () => {
@@ -103,13 +67,19 @@ const AnswerForm = () => {
     fetchUsers();
   }, []);
 
+  // fetching the papers
   useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      fetchSearchResults("testCode");
-    }, 300);
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("/api/getPapers");
+        setSearchResultsPaper(response.data.papers);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
 
-    return () => clearTimeout(debounceTimer);
-  }, [formData.testCode]);
+    fetchUsers();
+  }, []);
 
   const handleSelect = async (fieldName, result) => {
     setFormData((prevData) => ({
@@ -178,23 +148,11 @@ const AnswerForm = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // if (
-    //   formData.testCode ||
-    //   formData.questionNumber ||
-    //   formData.questionText ||
-    //   formData.answerText ||
-    //   formData.answerImages||
-    //   formData.writtenBy ||
-    //   formData.paper ||
-    //   formData.topicName ||
-    //   formData.subtopicName
-    // ) {
-    //   alert("There is a field missing please fill all the details!");
-    //   return;
-    // }
+
     const question = {
       testCode: formData.testCode,
       questionNumber: formData.questionNumber,
@@ -436,33 +394,46 @@ const AnswerForm = () => {
               <div className={styles.intputDiv}>
                 <div className={styles.labels}>paper</div>
                 <div className={styles.inputDivInner}>
-                  <input
-                    ref={paperInputRef}
-                    type="text"
-                    name="paper"
-                    disabled={paperFieldDis}
-                    value={formData.paper}
-                    onChange={handleInputChange}
-                  />
-                  <div
-                    onClick={() => {
-                      clearField("paper");
-                    }}
-                  >
-                    Clear
+                  <div className={styles2.inputDiv}>
+                    <input
+                      ref={paperInputRef}
+                      type="text"
+                      name="paper"
+                      disabled={paperFieldDis}
+                      value={formData.paper}
+                      onChange={handleInputChange}
+                    />
+                    {paperFieldDis && (
+                      <div
+                        onClick={() => {
+                          clearField("paper");
+                        }}
+                      >
+                        Clear
+                      </div>
+                    )}
                   </div>
 
-                  {showPaperOptions && searchResultsPaper.length > 0 && (
+                  {formData.paper && !paperFieldDis && (
                     <div className={styles2.optionsContainer}>
-                      {searchResultsPaper.slice(0, 5).map((result) => (
-                        <div
-                          onClick={() => handleSelect("paper", result)}
-                          key={result._id}
-                          className={styles2.option}
-                        >
-                          {result.name}
-                        </div>
-                      ))}
+                      {searchResultsPaper
+                        .slice(0, 5)
+                        .filter((item) => {
+                          return formData.paper.toLowerCase() === ""
+                            ? item
+                            : item.name
+                                .toLowerCase()
+                                .includes(formData.paper.toLowerCase());
+                        })
+                        .map((result) => (
+                          <div
+                            onClick={() => handleSelect("paper", result)}
+                            key={result._id}
+                            className={styles2.option}
+                          >
+                            {result.name}
+                          </div>
+                        ))}
                     </div>
                   )}
                 </div>
@@ -474,32 +445,45 @@ const AnswerForm = () => {
                 <div className={styles.labels}>topicName</div>
 
                 <div className={styles.inputDivInner}>
-                  <input
-                    ref={topicInputRef}
-                    type="text"
-                    name="topicName"
-                    disabled={topicFieldDis}
-                    value={formData.topicName}
-                    onChange={handleInputChange}
-                  />{" "}
-                  <div
-                    onClick={() => {
-                      clearField("topicName");
-                    }}
-                  >
-                    Clear
+                  <div className={styles2.inputDiv}>
+                    <input
+                      ref={topicInputRef}
+                      type="text"
+                      name="topicName"
+                      disabled={topicFieldDis}
+                      value={formData.topicName}
+                      onChange={handleInputChange}
+                    />{" "}
+                    {topicFieldDis && (
+                      <div
+                        onClick={() => {
+                          clearField("topicName");
+                        }}
+                      >
+                        Clear
+                      </div>
+                    )}
                   </div>
-                  {searchResultsTopic.length > 0 && (
+                  {formData.topicName && !topicFieldDis && (
                     <div className={styles2.optionsContainer}>
-                      {searchResultsTopic.slice(0, 5).map((result) => (
-                        <div
-                          onClick={() => handleSelect("topicName", result)}
-                          key={result._id}
-                          className={styles2.option}
-                        >
-                          {result.name}{" "}
-                        </div>
-                      ))}
+                      {searchResultsTopic
+                        .slice(0, 5)
+                        .filter((item) => {
+                          return formData.topicName.toLowerCase() === ""
+                            ? item
+                            : item.name
+                                .toLowerCase()
+                                .includes(formData.topicName.toLowerCase());
+                        })
+                        .map((result) => (
+                          <div
+                            onClick={() => handleSelect("topicName", result)}
+                            key={result._id}
+                            className={styles2.option}
+                          >
+                            {result.name}{" "}
+                          </div>
+                        ))}
                     </div>
                   )}
                 </div>
@@ -508,32 +492,45 @@ const AnswerForm = () => {
                 <div className={styles.labels}>subtopicName</div>
 
                 <div className={styles.inputDivInner}>
-                  <input
-                    ref={subTopicInputRef}
-                    type="text"
-                    name="subtopicName"
-                    disabled={subTopicFieldDis}
-                    value={formData.subtopicName}
-                    onChange={handleInputChange}
-                  />{" "}
-                  <div
-                    onClick={() => {
-                      clearField("subtopicName");
-                    }}
-                  >
-                    Clear
+                  <div className={styles2.inputDiv}>
+                    <input
+                      ref={subTopicInputRef}
+                      type="text"
+                      name="subtopicName"
+                      disabled={subTopicFieldDis}
+                      value={formData.subtopicName}
+                      onChange={handleInputChange}
+                    />{" "}
+                    {subTopicFieldDis && (
+                      <div
+                        onClick={() => {
+                          clearField("subtopicName");
+                        }}
+                      >
+                        Clear
+                      </div>
+                    )}
                   </div>
-                  {searchResultsSubTopic.length > 0 && (
+                  {formData.subtopicName && !subTopicFieldDis && (
                     <div className={styles2.optionsContainer}>
-                      {searchResultsSubTopic.slice(0, 5).map((result) => (
-                        <div
-                          onClick={() => handleSelect("subtopicName", result)}
-                          key={result._id}
-                          className={styles2.option}
-                        >
-                          {result.name}
-                        </div>
-                      ))}
+                      {searchResultsSubTopic
+                        .slice(0, 5)
+                        .filter((item) => {
+                          return formData.subtopicName.toLowerCase() === ""
+                            ? item
+                            : item.name
+                                .toLowerCase()
+                                .includes(formData.subtopicName.toLowerCase());
+                        })
+                        .map((result) => (
+                          <div
+                            onClick={() => handleSelect("subtopicName", result)}
+                            key={result._id}
+                            className={styles2.option}
+                          >
+                            {result.name}
+                          </div>
+                        ))}
                     </div>
                   )}
                 </div>

@@ -8,7 +8,7 @@ import Image from "next/image";
 const TopperCard = ({ toppers }) => {
   const router = useRouter();
   const { topperId } = router.query;
-  
+
   return (
     <div className={styles.TopperTopContainer}>
       <div className={styles.TopperCardMainContainer}>
@@ -144,9 +144,21 @@ export async function getServerSideProps(context) {
       await mongoose.connect(process.env.MONGO_URI);
     }
     const { topperId } = context.query;
-    const [name, rank, year] = topperId.split("-");
-    const toppers = await topper.findOne({ name, rank, year });
 
+    const [slugName, rankandyear] = topperId.split("-rank-");
+
+    const [rank, year] = rankandyear.split("-");
+
+    const name = slugName.replace(/-/g, " ");
+    const parsedRank = parseInt(rank, 10);
+    const parsedYear = parseInt(year, 10);
+    
+    const toppers = await topper.findOne({
+      name,
+      rank: parsedRank,
+      year: parsedYear,
+    });
+    console.log("topper" + toppers);
     return {
       props: { toppers: JSON.parse(JSON.stringify(toppers)) },
     };

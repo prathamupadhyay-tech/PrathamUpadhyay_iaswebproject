@@ -71,9 +71,22 @@ export async function getServerSideProps(context) {
       await mongoose.connect(process.env.MONGO_URI);
     }
     const objectId = context.query.topperId;
-    const [name, rank, year] = objectId.split("-");
-    console.log(name);
-    const toppers = await topper.findOne({ name, rank, year });
+    const [slugName, rankandyear] = objectId.split("-rank-");
+
+    const [rank, year] = rankandyear.split("-");
+
+    const name = slugName.replace(/-/g, " ");
+    const parsedRank = parseInt(rank, 10);
+    const parsedYear = parseInt(year, 10);
+    console.log("name:", name);
+    console.log("rank:", parsedRank);
+    console.log("year:", parsedYear);
+    const toppers = await topper.findOne({
+      name,
+      rank: parsedRank,
+      year: parsedYear,
+    });
+    console.log("year:", toppers);
     const answers = await answer
       .find({ writtenBy: toppers._id })
       .populate({
