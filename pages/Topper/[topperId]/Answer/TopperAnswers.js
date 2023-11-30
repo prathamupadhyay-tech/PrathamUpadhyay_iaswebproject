@@ -3,6 +3,9 @@ import styles from "./TopperAnswers.module.css";
 import mongoose from "mongoose";
 import answer from "@/models/answer";
 import topper from "@/models/topper";
+import paper from "@/models/paper";
+import topic from "@/models/topic";
+import subtopic from "@/models/subtopic";
 const TopperAnswers = ({ toppers, answers }) => {
   console.log(answers);
   console.log(toppers);
@@ -90,12 +93,16 @@ export async function getServerSideProps(context) {
       })
       .populate({
         path: "Answers",
+        model: answer,
         populate: {
           path: "paper",
+          model: paper,
           populate: {
             path: "paperTopics",
+            model: topic,
             populate: {
               path: "subTopic",
+              model: subtopic,
             },
           },
         },

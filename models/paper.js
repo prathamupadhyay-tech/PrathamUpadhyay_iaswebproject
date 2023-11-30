@@ -13,4 +13,4 @@ const paperSchema = new mongoose.Schema({
 });
 
 mongoose.models = {};
-export default mongoose.model("paper", paperSchema);
+export default mongoose.model("Paper", paperSchema);
