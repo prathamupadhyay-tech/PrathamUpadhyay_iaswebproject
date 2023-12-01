@@ -18,7 +18,8 @@ const AnswerForm = () => {
     questionText: "",
     answerText: "",
     answerImages: [],
-    writtenBy: "",
+    topperName: "",
+    writtenBy: "", //Id for the topper
     paper: "",
     topicName: "",
     subtopicName: "",
@@ -48,12 +49,20 @@ const AnswerForm = () => {
   const subTopicInputRef = useRef(null);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    if (e.target.name === "writtenBy") {
+      const { value } = e.target;
+      setFormData((prevData) => ({
+        ...prevData,
+        topperName: value,
+      }));
+    } else {
+      const { name, value } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   //   This is getting all the users for adding the writtenBy field
@@ -98,7 +107,8 @@ const AnswerForm = () => {
   const handleSelectForTopper = async (result) => {
     setFormData((prevData) => ({
       ...prevData,
-      writtenBy: result.name,
+      topperName: result.name,
+      writtenBy: result._id,
     }));
     setWrittenByFieldDis(true);
   };
@@ -252,7 +262,7 @@ const AnswerForm = () => {
       setWrittenByFieldDis(false);
       setFormData((prevData) => ({
         ...prevData,
-
+        topperName: "",
         writtenBy: "",
       }));
     }
@@ -413,7 +423,7 @@ const AnswerForm = () => {
                       type="text"
                       name="writtenBy"
                       disabled={setWrittenByFieldDis}
-                      value={formData.writtenBy}
+                      value={formData.topperName}
                       onChange={handleInputChange}
                     />
                     {writtenByFieldDis && (
@@ -427,16 +437,16 @@ const AnswerForm = () => {
                     )}
                   </div>
 
-                  {formData.writtenBy && !writtenByFieldDis && (
+                  {formData.topperName && !writtenByFieldDis && (
                     <div className={styles2.optionsContainer}>
                       {users
                         .slice(0, 5)
                         .filter((item) => {
-                          return formData.writtenBy.toLowerCase() === ""
+                          return formData.topperName.toLowerCase() === ""
                             ? item
                             : item.name
                                 .toLowerCase()
-                                .includes(formData.writtenBy.toLowerCase());
+                                .includes(formData.topperName.toLowerCase());
                         })
                         .map((result) => (
                           <div

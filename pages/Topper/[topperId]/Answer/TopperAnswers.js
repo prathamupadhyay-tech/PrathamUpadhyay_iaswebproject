@@ -7,8 +7,7 @@ import paper from "@/models/paper";
 import topic from "@/models/topic";
 import subtopic from "@/models/subtopic";
 const TopperAnswers = ({ toppers, answers }) => {
-  console.log(answers);
-  console.log(toppers);
+  
   return (
     <div className={styles.MainAnswersContainer}>
       <div className={styles.AnswersContainerHeading}>
@@ -48,16 +47,13 @@ const TopperAnswers = ({ toppers, answers }) => {
 
               <div>{data.paper.name}</div>
 
-              {data.paper.paperTopics.map((topic, topicIndex) => (
+              {data.topic.map((topic, topicIndex) => (
                 <>
-                  <div>{topic.name}</div>
-
-                  <div>
-                    {topic.subTopic.map((subtopic, subtopicIndex) => (
-                      <div key={subtopicIndex}>{subtopic.name}</div>
-                    ))}
-                  </div>
+                  <div key={topicIndex}>{topic.name}</div>
                 </>
+              ))}
+              {data.subTopic.map((subtopic, subtopicIndex) => (
+                <div key={subtopicIndex}>{subtopic.name}</div>
               ))}
               <div className={styles.viewAnswerBtn}>
                 <button>View</button>
@@ -82,9 +78,7 @@ export async function getServerSideProps(context) {
     const name = slugName.replace(/-/g, " ");
     const parsedRank = parseInt(rank, 10);
     const parsedYear = parseInt(year, 10);
-    console.log("name:", name);
-    console.log("rank:", parsedRank);
-    console.log("year:", parsedYear);
+    
     const toppers = await topper
       .findOne({
         name,
@@ -94,19 +88,22 @@ export async function getServerSideProps(context) {
       .populate({
         path: "Answers",
         model: answer,
-        populate: {
-          path: "paper",
-          model: paper,
-          populate: {
-            path: "paperTopics",
-            model: topic,
-            populate: {
-              path: "subTopic",
-              model: subtopic,
-            },
+        populate: [
+          {
+            path: "paper",
+            model: paper,
           },
-        },
+          {
+            path: "topic", // Use "topic" instead of "Answers.topic"
+            model: topic,
+          },
+          {
+            path: "subTopic", // Use "subTopic" instead of "Answers.subTopic"
+            model: subtopic,
+          },
+        ],
       })
+
       .exec();
 
     const answers = toppers ? toppers.Answers : [];
