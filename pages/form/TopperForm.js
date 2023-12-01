@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const TopperForm = () => {
+  const MAX_IMAGE_SIZE_BYTES = 600 * 1024;
   const router = useRouter();
-
+  const [ImageName, setImageName] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     rank: "",
@@ -23,19 +24,38 @@ const TopperForm = () => {
     optional1Marks: "",
     optional2Marks: "",
     Remarks: "",
+    profileImage: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e, type) => {
     const { name, value } = e.target;
-
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        alert(
+          "Image size exceeds the maximum allowed size (600KB). Please choose a smaller image."
+        );
+      } else {
+        // console.log("file ", file);
+        setImageName(file.name);
+        const base64Image = await convertToBase64(file);
+        setFormData((prevData) => ({
+          ...prevData,
+          profileImage: base64Image,
+        }));
+      }
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -73,6 +93,7 @@ const TopperForm = () => {
       optional1Marks: formData.optional1Marks,
       optional2Marks: formData.optional2Marks,
       Remarks: formData.Remarks,
+      profileImage: formData.profileImage,
     };
 
     try {
@@ -98,6 +119,44 @@ const TopperForm = () => {
     }
   };
 
+  const handleImagePaste = async (e) => {
+    if (e.clipboardData.items.length) {
+      for (let i = 0; i < e.clipboardData.items.length; i++) {
+        if (e.clipboardData.items[i].type.indexOf("image") !== -1) {
+          const fileObject = e.clipboardData.items[i].getAsFile();
+
+          if (fileObject) {
+            if (fileObject.size > MAX_IMAGE_SIZE_BYTES) {
+              alert(
+                "Image size exceeds the maximum allowed size (600KB). Please choose a smaller image."
+              );
+            } else {
+              setImageName(fileObject.name);
+              const base64Image = await convertToBase64(fileObject);
+
+              if (base64Image) {
+                setFormData((prevData) => ({
+                  ...prevData,
+                  profileImage: base64Image,
+                }));
+              }
+            }
+          }
+        }
+      }
+    } else {
+      alert(
+        "No image data was found in your clipboard. Copy an image first or take a screenshot."
+      );
+    }
+  };
+  const handleClear = (e) => {
+    e.preventDefault();
+    setFormData((prevData) => ({
+      ...prevData,
+      profileImage: "",
+    }));
+  };
   return (
     <div className={styles.all}>
       <div className={styles.questionFormContainer}>
@@ -174,6 +233,40 @@ const TopperForm = () => {
                   value={formData.gs4marks}
                   onChange={handleInputChange}
                 />
+              </div>
+              <div className={styles.intputDiv}>
+                <div className={styles.labels}>Profile Image</div>
+
+                <div>
+                  {!formData.profileImage && (
+                    <input
+                      type="file"
+                      name="profileImage"
+                      accept="image/*"
+                      placeholder="Image url"
+                      onChange={handleImageUpload}
+                    />
+                  )}
+
+                  {formData.profileImage && <p>File: {ImageName}</p>}
+                  {!formData.profileImage && (
+                    <div
+                      onPaste={handleImagePaste}
+                      style={{
+                        border: "2px dashed #ccc",
+                        padding: "20px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <p>Or paste an image using Ctrl+V</p>
+                    </div>
+                  )}
+                  {formData.profileImage && (
+                    <button onClick={handleClear} className={styles.clearBtn}>
+                      Clear
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
             <div className={styles.separator}></div>
@@ -259,5 +352,16 @@ const TopperForm = () => {
     </div>
   );
 };
-
+function convertToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+}
 export default TopperForm;

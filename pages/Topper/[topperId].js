@@ -29,9 +29,11 @@ const TopperCard = ({ toppers }) => {
               <Image
                 className={styles.TopperProfileImg}
                 alt="Description of the image"
-                width={120}
-                height={120}
-                src={"/user.png"}
+                fill
+                priority
+                objectFit="cover"
+                objectPosition="center"
+                src={toppers.ProfileImage}
               ></Image>
             </div>
             <div className={styles.TopperDetailsDivs}>
@@ -152,7 +154,7 @@ export async function getServerSideProps(context) {
     const name = slugName.replace(/-/g, " ");
     const parsedRank = parseInt(rank, 10);
     const parsedYear = parseInt(year, 10);
-    
+
     const toppers = await topper.findOne({
       name,
       rank: parsedRank,

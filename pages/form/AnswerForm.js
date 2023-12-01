@@ -32,11 +32,14 @@ const AnswerForm = () => {
   const [searchResultsPaper, setSearchResultsPaper] = useState([]);
   const [searchResultsTopic, setSearchResultsTopic] = useState([]);
   const [searchResultsSubTopic, setSearchResultsSubTopic] = useState([]);
+  const [answers, setAnswers] = useState([]);
+
   const [showPaperOptions, setShowPaperOptions] = useState(false);
   const [showTopicOptions, setShowTopicOptions] = useState(false);
   const [showSubTopicOptions, setShowSubTopicOptions] = useState(false);
 
   const [paperFieldDis, setPaperFieldDis] = useState(false);
+  const [writtenByFieldDis, setWrittenByFieldDis] = useState(false);
   const [topicFieldDis, setTopicFieldDis] = useState(false);
   const [subTopicFieldDis, setSubTopicFieldDis] = useState(false);
 
@@ -80,6 +83,25 @@ const AnswerForm = () => {
 
     fetchUsers();
   }, []);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("/api/getAnswers");
+        setAnswers(response.data.answers);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+  const handleSelectForTopper = async (result) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      writtenBy: result.name,
+    }));
+    setWrittenByFieldDis(true);
+  };
 
   const handleSelect = async (fieldName, result) => {
     setFormData((prevData) => ({
@@ -224,6 +246,14 @@ const AnswerForm = () => {
         ...prevData,
         subtopicName: "",
         subtopicNameId: "",
+      }));
+    }
+    if (fieldName === "writtenBy") {
+      setWrittenByFieldDis(false);
+      setFormData((prevData) => ({
+        ...prevData,
+
+        writtenBy: "",
       }));
     }
   };
@@ -377,19 +407,49 @@ const AnswerForm = () => {
               </div>
               <div className={styles.intputDiv}>
                 <div className={styles.labels}>writtenBy</div>
-                <select
-                  name="writtenBy"
-                  value={formData.writtenBy}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select User</option>
-                  {users &&
-                    users.map((user) => (
-                      <option key={user._id} value={user._id}>
-                        {user.name}
-                      </option>
-                    ))}
-                </select>
+                <div className={styles.inputDivInner}>
+                  <div className={styles2.inputDiv}>
+                    <input
+                      type="text"
+                      name="writtenBy"
+                      disabled={setWrittenByFieldDis}
+                      value={formData.writtenBy}
+                      onChange={handleInputChange}
+                    />
+                    {writtenByFieldDis && (
+                      <div
+                        onClick={() => {
+                          clearField("writtenBy");
+                        }}
+                      >
+                        Clear
+                      </div>
+                    )}
+                  </div>
+
+                  {formData.writtenBy && !writtenByFieldDis && (
+                    <div className={styles2.optionsContainer}>
+                      {users
+                        .slice(0, 5)
+                        .filter((item) => {
+                          return formData.writtenBy.toLowerCase() === ""
+                            ? item
+                            : item.name
+                                .toLowerCase()
+                                .includes(formData.writtenBy.toLowerCase());
+                        })
+                        .map((result) => (
+                          <div
+                            onClick={() => handleSelectForTopper(result)}
+                            key={result._id}
+                            className={styles2.option}
+                          >
+                            {result.name}
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className={styles.intputDiv}>
                 <div className={styles.labels}>paper</div>

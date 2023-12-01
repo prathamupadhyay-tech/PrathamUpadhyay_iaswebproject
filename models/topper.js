@@ -65,6 +65,9 @@ const topperSchema = new mongoose.Schema({
       ref: "Answer",
     },
   ],
+  ProfileImage: {
+    type: String,
+  },
 });
 mongoose.models = {};
 export default mongoose.model("Topper", topperSchema);

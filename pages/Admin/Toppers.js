@@ -9,7 +9,7 @@ import mongoose from "mongoose";
 const Toppers = ({ toppers }) => {
   const [selectedTopper, setSelectedTopper] = useState(null);
 
-  console.log(toppers);
+
   return (
     <div>
       <div className={styles.mainTopperContainer}>
@@ -26,7 +26,7 @@ const Toppers = ({ toppers }) => {
           <div className={styles.TopperContainer}>
             {toppers &&
               toppers.map((data, index) => {
-                console.log(data);
+                
                 return (
                   <div key={index} className={styles.TopperDetails}>
                     <div className={styles.optionsIconDiv}>
@@ -44,9 +44,11 @@ const Toppers = ({ toppers }) => {
                         <Image
                           className={styles.TopperProfileImg}
                           alt="Description of the image"
-                          width={150}
-                          height={150}
-                          src={"/user.png"}
+                          fill
+                          priority
+                          objectFit="cover"
+                          objectPosition="center"
+                          src={data._doc.ProfileImage}
                         ></Image>
                       </div>
                       <div className={styles.TopperDetailsDivs}>
@@ -94,7 +96,7 @@ export async function getServerSideProps(context) {
       }`;
       return { ...data, slug };
     });
-    console.log(slugs);
+   
     return {
       props: { toppers: JSON.parse(JSON.stringify(slugs)) },
     };

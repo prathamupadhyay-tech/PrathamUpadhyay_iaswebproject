@@ -40,11 +40,18 @@
   display: flex;
   gap: 1em;
 }
-
+.TopperProfileImg{
+    border-radius: 50%;
+}
 .TopperProfileImgdiv{
     display: flex;
+    position: relative;
+    
     justify-content: center;
     align-items: center;
+    width: 12em;
+    height: 12em;
+
 }
 .TopperDetails{
    
