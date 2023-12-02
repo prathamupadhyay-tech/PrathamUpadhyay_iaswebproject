@@ -9,6 +9,18 @@
     border-radius: 0.3em;
 
 }
+.showSelectedtopic{
+    width: 100%;
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+.showSelectedtopic>div{
+    padding: 0.3em;
+    background-color: white;
+    border-radius: 0.4em;
+
+}
 .option{
     width: 100%;
     font-size: 1em;

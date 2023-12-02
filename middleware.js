@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
-  console.log("hello");
+ 
   const authToken = request.cookies.get("authToken")?.value;
-  console.log(authToken);
+  
+
 
   const loggedInUserNotAccessPaths =
     request.nextUrl.pathname === "/login/LoginPage";

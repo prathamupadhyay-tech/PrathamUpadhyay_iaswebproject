@@ -28,6 +28,10 @@ const AnswerForm = () => {
     subtopicNameId: "",
   });
 
+  const [topicArray, setTopicArray] = useState([{ name: "", id: "" }]);
+  const [subTopicArray, setSubTopicArray] = useState([
+    { name: "", id: "", topicId: "" },
+  ]);
   const [isLoading, setIsLoading] = useState(false);
 
   const [searchResultsPaper, setSearchResultsPaper] = useState([]);
@@ -36,12 +40,12 @@ const AnswerForm = () => {
   const [answers, setAnswers] = useState([]);
 
   const [showPaperOptions, setShowPaperOptions] = useState(false);
-  const [showTopicOptions, setShowTopicOptions] = useState(false);
+  const [showTopicOptions, setShowTopicOptions] = useState(true);
   const [showSubTopicOptions, setShowSubTopicOptions] = useState(false);
 
   const [paperFieldDis, setPaperFieldDis] = useState(false);
   const [writtenByFieldDis, setWrittenByFieldDis] = useState(false);
-  const [topicFieldDis, setTopicFieldDis] = useState(false);
+
   const [subTopicFieldDis, setSubTopicFieldDis] = useState(false);
 
   const paperInputRef = useRef(null);
@@ -63,6 +67,7 @@ const AnswerForm = () => {
         [name]: value,
       }));
     }
+    console.log(searchResultsSubTopic);
   };
 
   //   This is getting all the users for adding the writtenBy field
@@ -119,7 +124,6 @@ const AnswerForm = () => {
       [fieldName]: result.name,
       [`${fieldName}Id`]: result._id,
     }));
-
     if (fieldName === "paper") {
       setPaperFieldDis(true);
       try {
@@ -132,54 +136,58 @@ const AnswerForm = () => {
         console.error(`Error fetching topics for the selected paper:`, error);
       }
     } else if (fieldName === "topicName") {
-      setTopicFieldDis(true);
+      if (
+        topicArray.some(
+          (topic) =>
+            topic.name.toLowerCase() === formData.topicName.toLowerCase()
+        )
+      ) {
+        alert(`${result.name} topic is already added`);
+        return;
+      }
+
+      setTopicArray((prevData) => [
+        ...prevData,
+        { name: result.name, id: result._id },
+      ]);
+
       try {
         const response = await axios.get(
           `/api/getSubTopics?topicId=${result._id}`
         );
 
-        setSearchResultsSubTopic(response.data);
+        const updatedResults = response.data.map((item) => ({
+          ...item,
+          topicId: result._id, // Change parentId to the appropriate key
+        }));
+
+        setSearchResultsSubTopic((prevResults) => [
+          ...prevResults,
+          ...updatedResults,
+        ]);
+
+        setFormData((prevData) => ({
+          ...prevData,
+          topicName: "",
+        }));
       } catch (error) {
         console.error(`Error fetching topics for the selected paper:`, error);
       }
     } else if (fieldName === "subtopicName") {
-      setSubTopicFieldDis(true);
+      setSubTopicArray((prevData) => [
+        ...prevData,
+        { name: result.name, id: result._id, topicId: result.topicId },
+      ]);
+      setFormData((prevData) => ({
+        ...prevData,
+        subtopicName: "",
+      }));
     }
 
     if (fieldName === "paper") setShowPaperOptions(false);
     else if (fieldName === "topicName") setShowTopicOptions(false);
     else if (fieldName === "subtopicName") setShowSubTopicOptions(false);
   };
-
-  const handleClickOutside = (event) => {
-    if (
-      paperInputRef.current &&
-      !paperInputRef.current.contains(event.target)
-    ) {
-      setShowPaperOptions(false);
-    }
-
-    if (
-      topicInputRef.current &&
-      !topicInputRef.current.contains(event.target)
-    ) {
-      setShowTopicOptions(false);
-    }
-
-    if (
-      subTopicInputRef.current &&
-      !subTopicInputRef.current.contains(event.target)
-    ) {
-      setShowSubTopicOptions(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -193,11 +201,10 @@ const AnswerForm = () => {
       answerImages: formData.answerImages,
       writtenBy: formData.writtenBy,
       paper: formData.paper,
-      topicName: formData.topicName,
-      subtopicName: formData.subtopicName,
+
       paperId: formData.paperId,
-      topicId: formData.topicNameId,
-      subTopicId: formData.subtopicNameId,
+      topicArray: topicArray,
+      subTopicArray: subTopicArray,
     };
 
     try {
@@ -242,30 +249,6 @@ const AnswerForm = () => {
         paper: "",
       }));
     }
-    if (fieldName === "topicName") {
-      setTopicFieldDis(false);
-      setFormData((prevData) => ({
-        ...prevData,
-        topicNameId: "",
-        topicName: "",
-      }));
-    }
-    if (fieldName === "subtopicName") {
-      setSubTopicFieldDis(false);
-      setFormData((prevData) => ({
-        ...prevData,
-        subtopicName: "",
-        subtopicNameId: "",
-      }));
-    }
-    if (fieldName === "writtenBy") {
-      setWrittenByFieldDis(false);
-      setFormData((prevData) => ({
-        ...prevData,
-        topperName: "",
-        writtenBy: "",
-      }));
-    }
   };
   const handleImageUpload = async (e) => {
     const files = e.target.files;
@@ -294,6 +277,37 @@ const AnswerForm = () => {
     }
   };
 
+  const addTopic = () => {
+    if (
+      topicArray.some(
+        (topic) => topic.name.toLowerCase() === formData.topicName.toLowerCase()
+      )
+    ) {
+      alert(`${formData.topicName} topic is already added`);
+      return;
+    }
+
+    setTopicArray((prevData) => [
+      ...prevData,
+      { name: formData.topicName, id: "" },
+    ]);
+  };
+  const addSubTopic = () => {
+    if (
+      subTopicArray.some(
+        (topic) =>
+          topic.name.toLowerCase() === formData.subtopicName.toLowerCase()
+      )
+    ) {
+      alert(`${formData.subtopicName} topic is already added`);
+      return;
+    }
+
+    setTopicArray((prevData) => [
+      ...prevData,
+      { name: formData.subtopicName, id: "" },
+    ]);
+  };
   const handleImagePaste = async (e) => {
     if (e.clipboardData.items.length) {
       for (let i = 0; i < e.clipboardData.items.length; i++) {
@@ -511,6 +525,12 @@ const AnswerForm = () => {
             </div>
             <div className={styles.separator}></div>
             <div className={styles.secondHalf}>
+              <h4>Added Topics</h4>
+              <div className={styles2.showSelectedtopic}>
+                {topicArray.map((data, index) => {
+                  return <>{data.name && <div key={index}>{data.name}</div>}</>;
+                })}
+              </div>
               <div className={styles.intputDiv}>
                 <div className={styles.labels}>topicName</div>
 
@@ -520,43 +540,42 @@ const AnswerForm = () => {
                       ref={topicInputRef}
                       type="text"
                       name="topicName"
-                      disabled={topicFieldDis}
                       value={formData.topicName}
                       onChange={handleInputChange}
                     />{" "}
-                    {topicFieldDis && (
-                      <div
-                        onClick={() => {
-                          clearField("topicName");
-                        }}
-                      >
-                        Clear
-                      </div>
-                    )}
+                    <div onClick={addTopic}>Add</div>
                   </div>
-                  {formData.topicName && !topicFieldDis && (
-                    <div className={styles2.optionsContainer}>
-                      {searchResultsTopic
-                        .slice(0, 5)
-                        .filter((item) => {
-                          return formData.topicName.toLowerCase() === ""
-                            ? item
-                            : item.name
-                                .toLowerCase()
-                                .includes(formData.topicName.toLowerCase());
-                        })
-                        .map((result) => (
-                          <div
-                            onClick={() => handleSelect("topicName", result)}
-                            key={result._id}
-                            className={styles2.option}
-                          >
-                            {result.name}{" "}
-                          </div>
-                        ))}
-                    </div>
+                  {formData.topicName && (
+                    <>
+                      <div className={styles2.optionsContainer}>
+                        {searchResultsTopic
+                          .slice(0, 5)
+                          .filter((item) => {
+                            return formData.topicName.toLowerCase() === ""
+                              ? item
+                              : item.name
+                                  .toLowerCase()
+                                  .includes(formData.topicName.toLowerCase());
+                          })
+                          .map((result) => (
+                            <div
+                              onClick={() => handleSelect("topicName", result)}
+                              key={result._id}
+                              className={styles2.option}
+                            >
+                              {result.name}{" "}
+                            </div>
+                          ))}
+                      </div>
+                    </>
                   )}
                 </div>
+              </div>
+              <h4>Added sub Topics</h4>
+              <div className={styles2.showSelectedtopic}>
+                {subTopicArray.map((data, index) => {
+                  return <>{data.name && <div key={index}>{data.name}</div>}</>;
+                })}
               </div>
               <div className={styles.intputDiv}>
                 <div className={styles.labels}>subtopicName</div>
@@ -567,24 +586,15 @@ const AnswerForm = () => {
                       ref={subTopicInputRef}
                       type="text"
                       name="subtopicName"
-                      disabled={subTopicFieldDis}
                       value={formData.subtopicName}
                       onChange={handleInputChange}
-                    />{" "}
-                    {subTopicFieldDis && (
-                      <div
-                        onClick={() => {
-                          clearField("subtopicName");
-                        }}
-                      >
-                        Clear
-                      </div>
-                    )}
+                    />
+                    <div onClick={addSubTopic}>Add</div>
                   </div>
-                  {formData.subtopicName && !subTopicFieldDis && (
+                  {formData.subtopicName && (
                     <div className={styles2.optionsContainer}>
                       {searchResultsSubTopic
-                        .slice(0, 5)
+
                         .filter((item) => {
                           return formData.subtopicName.toLowerCase() === ""
                             ? item

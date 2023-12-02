@@ -4,9 +4,9 @@ import React from "react";
 import styles from "./QuestionForm.module.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import axios from "axios";
 
 const TopperForm = () => {
-  const MAX_IMAGE_SIZE_BYTES = 600 * 1024;
   const router = useRouter();
   const [ImageName, setImageName] = useState("");
   const [formData, setFormData] = useState({
@@ -41,66 +41,40 @@ const TopperForm = () => {
     const file = e.target.files[0];
 
     if (file) {
-      if (file.size > MAX_IMAGE_SIZE_BYTES) {
-        alert(
-          "Image size exceeds the maximum allowed size (600KB). Please choose a smaller image."
-        );
-      } else {
-        // console.log("file ", file);
-        setImageName(file.name);
-        const base64Image = await convertToBase64(file);
-        setFormData((prevData) => ({
-          ...prevData,
-          profileImage: base64Image,
-        }));
-      }
+      setImageName(file.name);
+      console.log(file);
+      // const base64Image = await convertToBase64(file);
+      setFormData((prevData) => ({
+        ...prevData,
+        profileImage: file,
+      }));
     }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // if (
-    //   formData.name ||
-    //   formData.Remarks ||
-    //   formData.rank ||
-    //   formData.gs1marks ||
-    //   formData.gs2marks ||
-    //   formData.gs3marks ||
-    //   formData.gs4marks ||
-    //   formData.essayMarks ||
-    //   formData.year ||
-    //   formData.optional1Marks ||
-    //   formData.optional2Marks ||
-    //   formData.optionalSub ||
-    //   formData.prelimsScoreGs ||
-    //   formData.prelimsScoreCsat
-    // ) {
-    //   alert("There is a field missing please fill all the details!");
-    //   return;
-    // }
-    const question = {
-      name: formData.name,
-      rank: formData.rank,
-      year: formData.year,
-      gs1marks: formData.gs1marks,
-      gs2marks: formData.gs2marks,
-      gs3marks: formData.gs3marks,
-      gs4marks: formData.gs4marks,
-      essayMarks: formData.essayMarks,
-      prelimsScoreGs: formData.prelimsScoreGs,
-      prelimsScoreCsat: formData.prelimsScoreCsat,
-      optionalSub: formData.optionalSub,
-      optional1Marks: formData.optional1Marks,
-      optional2Marks: formData.optional2Marks,
-      Remarks: formData.Remarks,
-      profileImage: formData.profileImage,
-    };
+    console.log("file image" + formData.profileImage);
 
+    const formdata = new FormData();
+    formdata.append("name", formData.name);
+    formdata.append("rank", formData.rank);
+    formdata.append("year", formData.year);
+    formdata.append("gs1marks", formData.gs1marks);
+    formdata.append("gs2marks", formData.gs2marks);
+    formdata.append("gs3marks", formData.gs3marks);
+    formdata.append("gs4marks", formData.gs4marks);
+    formdata.append("essayMarks", formData.essayMarks);
+    formdata.append("prelimsScoreGs", formData.prelimsScoreGs);
+    formdata.append("prelimsScoreCsat", formData.prelimsScoreCsat);
+    formdata.append("optionalSub", formData.optionalSub);
+    formdata.append("optional1Marks", formData.optional1Marks);
+    formdata.append("optional2Marks", formData.optional2Marks);
+    formdata.append("Remarks", formData.Remarks);
+    formdata.append("profileImage", formData.profileImage);
     try {
       const res = await fetch("/api/AddTopper", {
         method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(question),
+        body: formdata,
       });
 
       if (res.status === 200) {
@@ -126,20 +100,14 @@ const TopperForm = () => {
           const fileObject = e.clipboardData.items[i].getAsFile();
 
           if (fileObject) {
-            if (fileObject.size > MAX_IMAGE_SIZE_BYTES) {
-              alert(
-                "Image size exceeds the maximum allowed size (600KB). Please choose a smaller image."
-              );
-            } else {
-              setImageName(fileObject.name);
-              const base64Image = await convertToBase64(fileObject);
+            setImageName(fileObject.name);
+            // const base64Image = await convertToBase64(fileObject);
 
-              if (base64Image) {
-                setFormData((prevData) => ({
-                  ...prevData,
-                  profileImage: base64Image,
-                }));
-              }
+            if (fileObject) {
+              setFormData((prevData) => ({
+                ...prevData,
+                profileImage: fileObject,
+              }));
             }
           }
         }
@@ -352,16 +320,16 @@ const TopperForm = () => {
     </div>
   );
 };
-function convertToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
-    fileReader.onerror = (error) => {
-      reject(error);
-    };
-  });
-}
+// function convertToBase64(file) {
+//   return new Promise((resolve, reject) => {
+//     const fileReader = new FileReader();
+//     fileReader.readAsDataURL(file);
+//     fileReader.onload = () => {
+//       resolve(fileReader.result);
+//     };
+//     fileReader.onerror = (error) => {
+//       reject(error);
+//     };
+//   });
+// }
 export default TopperForm;

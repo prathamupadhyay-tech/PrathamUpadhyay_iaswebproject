@@ -7,6 +7,13 @@ import mongoose from "mongoose";
 import topic from "@/models/topic";
 import subtopic from "@/models/subtopic";
 import topper from "@/models/topper";
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "10mb",
+    },
+  },
+};
 const handler = async (req, res) => {
   if (req.method == "POST") {
     try {
@@ -65,7 +72,6 @@ const handler = async (req, res) => {
         papId = req.body.paperId;
       }
 
-      
       let q = new Answer({
         testCode: req.body.testCode,
         questionNumber: req.body.questionNumber,
@@ -86,7 +92,7 @@ const handler = async (req, res) => {
 
       res.status(200).json({ message: "success" });
     } catch (err) {
-      console.error("Error in handler:", error);
+      console.error("Error in handler:", err);
       res.status(500).json({ message: "Internal server error" });
     }
   } else {

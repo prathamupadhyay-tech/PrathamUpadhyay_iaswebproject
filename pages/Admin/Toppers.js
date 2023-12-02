@@ -9,7 +9,6 @@ import mongoose from "mongoose";
 const Toppers = ({ toppers }) => {
   const [selectedTopper, setSelectedTopper] = useState(null);
 
-
   return (
     <div>
       <div className={styles.mainTopperContainer}>
@@ -26,7 +25,6 @@ const Toppers = ({ toppers }) => {
           <div className={styles.TopperContainer}>
             {toppers &&
               toppers.map((data, index) => {
-                
                 return (
                   <div key={index} className={styles.TopperDetails}>
                     <div className={styles.optionsIconDiv}>
@@ -48,7 +46,7 @@ const Toppers = ({ toppers }) => {
                           priority
                           objectFit="cover"
                           objectPosition="center"
-                          src={data._doc.ProfileImage}
+                          src={`/uploads/${data._doc.ProfileImage}`}
                         ></Image>
                       </div>
                       <div className={styles.TopperDetailsDivs}>
@@ -96,7 +94,7 @@ export async function getServerSideProps(context) {
       }`;
       return { ...data, slug };
     });
-   
+
     return {
       props: { toppers: JSON.parse(JSON.stringify(slugs)) },
     };
