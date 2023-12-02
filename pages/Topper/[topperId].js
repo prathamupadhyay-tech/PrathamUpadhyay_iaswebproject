@@ -33,7 +33,7 @@ const TopperCard = ({ toppers }) => {
                 priority
                 objectFit="cover"
                 objectPosition="center"
-                src={toppers.ProfileImage}
+                src={`/uploads/${toppers.ProfileImage}`}
               ></Image>
             </div>
             <div className={styles.TopperDetailsDivs}>
