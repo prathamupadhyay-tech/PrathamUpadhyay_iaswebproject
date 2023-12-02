@@ -30,11 +30,12 @@ router
 
   .post(async (req, res) => {
     try {
+      console.log("req file", req.file);
+      console.log("body");
       if (!req.file) {
         return res.status(400).json({ message: "Image file is required" });
       }
-      console.log("req file", req.file);
-      console.log("body");
+      
       const filename = new Date().getTime() + "-" + req.file.originalname;
       const newFilePath = path.join(UPLOAD_PATH, filename);
 
