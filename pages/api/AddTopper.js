@@ -68,11 +68,11 @@ const saveTopper = async (fields, files) => {
       return res.status(400).json({ message: "Image file is required" });
     }
 
-    const compressedBuffer = await sharp(files.profileImage[0].filepath)
-      .resize({ width: 250, height: 250 })
-      .withMetadata()
-      .jpeg({ quality: 80 }) // Adjust quality as needed
-      .toBuffer();
+    // const compressedBuffer = await sharp(files.profileImage[0].filepath)
+    //   .resize({ width: 250, height: 250 })
+    //   .withMetadata()
+    //   .jpeg({ quality: 80 }) // Adjust quality as needed
+    //   .toBuffer();
 
     // const filename = new Date().getTime() + "-" + req.file.originalname;
     // const newFilePath = path.join(UPLOAD_PATH, filename);
@@ -82,7 +82,7 @@ const saveTopper = async (fields, files) => {
     //   .jpeg({ quality: 50 })
     //   .toBuffer();
 
-    const image64 = compressedBuffer.toString("base64");
+    // const image64 = compressedBuffer.toString("base64");
 
     let newTopper = new topper({
       name: fields.name[0],
