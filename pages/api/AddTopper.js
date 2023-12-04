@@ -32,25 +32,25 @@ const saveTopper = async (req, res) => {
     //   return res.status(400).json({ message: "Image file is required" });
     // }
 
-    // const startIndex = req.body.profileImage.indexOf(",") + 1;
-    // const base64ImageData = req.body.profileImage.slice(startIndex);
-    // const buffer = Buffer.from(base64ImageData, "base64");
+    const startIndex = req.body.profileImage.indexOf(",") + 1;
+    const base64ImageData = req.body.profileImage.slice(startIndex);
+    const buffer = Buffer.from(base64ImageData, "base64");
 
-    // const compressedBuffer = await sharp(buffer)
-    //   .resize({ width: 250, height: 250 })
-    //   .withMetadata()
-    //   .jpeg({ quality: 80 }) // Adjust quality as needed
+    const compressedBuffer = await sharp(buffer)
+      .resize({ width: 250, height: 250 })
+      .withMetadata()
+      .jpeg({ quality: 80 }) // Adjust quality as needed
+      .toBuffer();
+
+    // const filename = new Date().getTime() + "-" + req.file.originalname;
+    // const newFilePath = path.join(UPLOAD_PATH, filename);
+
+    // const buffer = await sharp(req.file.buffer)
+    //   .resize()
+    //   .jpeg({ quality: 50 })
     //   .toBuffer();
 
-    // // const filename = new Date().getTime() + "-" + req.file.originalname;
-    // // const newFilePath = path.join(UPLOAD_PATH, filename);
-
-    // // const buffer = await sharp(req.file.buffer)
-    // //   .resize()
-    // //   .jpeg({ quality: 50 })
-    // //   .toBuffer();
-
-    // const image64 = compressedBuffer.toString("base64");
+    const image64 = compressedBuffer.toString("base64");
 
     let newTopper = new topper({
       name: req.body.name,
@@ -60,7 +60,7 @@ const saveTopper = async (req, res) => {
       gs2marks: req.body.gs2marks,
       gs3marks: req.body.gs3marks,
       gs4marks: req.body.gs4marks,
-      ProfileImage: req.body.profileImage,
+      ProfileImage: image64,
       essayMarks: req.body.essayMarks,
       prelimsScoreGs: req.body.prelimsScoreGs,
       prelimsScoreCsat: req.body.prelimsScoreCsat,
@@ -128,4 +128,4 @@ const saveTopper = async (req, res) => {
 //   // }
 // };
 
-export default saveTopper;
+export default connectDb(saveTopper);
