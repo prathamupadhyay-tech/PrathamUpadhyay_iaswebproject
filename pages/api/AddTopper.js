@@ -103,6 +103,7 @@ const saveTopper = async (fields, files) => {
       Remarks: fields.Remarks[0],
     });
     const savedTopper = await newTopper.save();
+    console.log("topper" + saveTopper);
   } catch (err) {
     console.log(err);
   }
