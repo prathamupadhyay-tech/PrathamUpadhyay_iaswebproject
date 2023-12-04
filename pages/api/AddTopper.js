@@ -43,6 +43,7 @@ router
       // example to check for a very specific error
       if (err.code === formidableErrors.maxFieldsExceeded) {
       }
+      console.log(err);
       console.error(err);
       res.writeHead(err.httpCode || 400, { "Content-Type": "text/plain" });
       res.end(String(err));
