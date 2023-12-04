@@ -83,7 +83,7 @@ const saveTopper = async (fields, files) => {
     //   .toBuffer();
 
     const image64 = compressedBuffer.toString("base64");
-    console.log("buffer" + image64);
+   
     let newTopper = new topper({
       name: fields.name[0],
       rank: parseInt(fields.rank[0]),
@@ -103,7 +103,7 @@ const saveTopper = async (fields, files) => {
       Remarks: fields.Remarks[0],
     });
     const savedTopper = await newTopper.save();
-    console.log("topper" + saveTopper);
+    console.log("topper" + savedTopper);
   } catch (err) {
     console.log(err);
   }
