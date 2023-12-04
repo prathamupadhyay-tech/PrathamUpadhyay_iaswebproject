@@ -64,6 +64,7 @@ router
 
 const saveTopper = async (fields, files) => {
   try {
+    
     if (!files) {
       return res.status(400).json({ message: "Image file is required" });
     }
