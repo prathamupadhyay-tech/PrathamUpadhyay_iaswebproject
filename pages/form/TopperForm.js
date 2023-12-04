@@ -5,6 +5,7 @@ import styles from "./QuestionForm.module.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import axios from "axios";
+import question from "@/models/question";
 
 const TopperForm = () => {
   const router = useRouter();
@@ -43,10 +44,10 @@ const TopperForm = () => {
     if (file) {
       setImageName(file.name);
       console.log(file);
-      // const base64Image = await convertToBase64(file);
+      const base64Image = await convertToBase64(file);
       setFormData((prevData) => ({
         ...prevData,
-        profileImage: file,
+        profileImage: base64Image,
       }));
     }
   };
@@ -54,27 +55,46 @@ const TopperForm = () => {
     e.preventDefault();
     setIsLoading(true);
     console.log("file image" + formData.profileImage);
-
-    const formdata = new FormData();
-    formdata.append("name", formData.name);
-    formdata.append("rank", formData.rank);
-    formdata.append("year", formData.year);
-    formdata.append("gs1marks", formData.gs1marks);
-    formdata.append("gs2marks", formData.gs2marks);
-    formdata.append("gs3marks", formData.gs3marks);
-    formdata.append("gs4marks", formData.gs4marks);
-    formdata.append("essayMarks", formData.essayMarks);
-    formdata.append("prelimsScoreGs", formData.prelimsScoreGs);
-    formdata.append("prelimsScoreCsat", formData.prelimsScoreCsat);
-    formdata.append("optionalSub", formData.optionalSub);
-    formdata.append("optional1Marks", formData.optional1Marks);
-    formdata.append("optional2Marks", formData.optional2Marks);
-    formdata.append("Remarks", formData.Remarks);
-    formdata.append("profileImage", formData.profileImage);
+    const topper = {
+      name: formData.name,
+      rank: formData.rank,
+      year: formData.year,
+      gs1marks: formData.gs1marks,
+      gs2marks: formData.gs2marks,
+      gs3marks: formData.gs3marks,
+      gs4marks: formData.gs4marks,
+      essayMarks: formData.essayMarks,
+      prelimsScoreGs: formData.prelimsScoreGs,
+      prelimsScoreCsat: formData.prelimsScoreCsat,
+      optionalSub: formData.optionalSub,
+      optional1Marks: formData.optional1Marks,
+      optional2Marks: formData.optional2Marks,
+      Remarks: formData.Remarks,
+      profileImage: formData.profileImage,
+    };
+    // const formdata = new FormData();
+    // formdata.append("name", formData.name);
+    // formdata.append("rank", formData.rank);
+    // formdata.append("year", formData.year);
+    // formdata.append("gs1marks", formData.gs1marks);
+    // formdata.append("gs2marks", formData.gs2marks);
+    // formdata.append("gs3marks", formData.gs3marks);
+    // formdata.append("gs4marks", formData.gs4marks);
+    // formdata.append("essayMarks", formData.essayMarks);
+    // formdata.append("prelimsScoreGs", formData.prelimsScoreGs);
+    // formdata.append("prelimsScoreCsat", formData.prelimsScoreCsat);
+    // formdata.append("optionalSub", formData.optionalSub);
+    // formdata.append("optional1Marks", formData.optional1Marks);
+    // formdata.append("optional2Marks", formData.optional2Marks);
+    // formdata.append("Remarks", formData.Remarks);
+    // formdata.append("profileImage", formData.profileImage);
     try {
       const res = await fetch("/api/AddTopper", {
         method: "POST",
-        body: formdata,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(topper),
       });
 
       if (res.status === 200) {
@@ -82,7 +102,7 @@ const TopperForm = () => {
         router.push("/Admin/Toppers");
       } else {
         console.log(res);
-        
+
         setIsLoading(false);
       }
     } catch (error) {
@@ -100,12 +120,12 @@ const TopperForm = () => {
 
           if (fileObject) {
             setImageName(fileObject.name);
-            // const base64Image = await convertToBase64(fileObject);
+            const base64Image = await convertToBase64(fileObject);
 
             if (fileObject) {
               setFormData((prevData) => ({
                 ...prevData,
-                profileImage: fileObject,
+                profileImage: base64Image,
               }));
             }
           }
@@ -319,16 +339,16 @@ const TopperForm = () => {
     </div>
   );
 };
-// function convertToBase64(file) {
-//   return new Promise((resolve, reject) => {
-//     const fileReader = new FileReader();
-//     fileReader.readAsDataURL(file);
-//     fileReader.onload = () => {
-//       resolve(fileReader.result);
-//     };
-//     fileReader.onerror = (error) => {
-//       reject(error);
-//     };
-//   });
-// }
+function convertToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+}
 export default TopperForm;
