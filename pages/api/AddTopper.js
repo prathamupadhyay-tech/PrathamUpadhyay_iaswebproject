@@ -64,7 +64,6 @@ router
 
 const saveTopper = async (fields, files) => {
   try {
-    
     if (!files) {
       return res.status(400).json({ message: "Image file is required" });
     }
@@ -74,7 +73,7 @@ const saveTopper = async (fields, files) => {
       .withMetadata()
       .jpeg({ quality: 80 }) // Adjust quality as needed
       .toBuffer();
-
+    console.log("buffer" + compressedBuffer);
     // const filename = new Date().getTime() + "-" + req.file.originalname;
     // const newFilePath = path.join(UPLOAD_PATH, filename);
 
