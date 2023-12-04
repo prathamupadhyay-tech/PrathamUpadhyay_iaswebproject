@@ -81,7 +81,8 @@ const TopperForm = () => {
         setIsLoading(false);
         router.push("/Admin/Toppers");
       } else {
-        alert("This");
+        console.log(res);
+        
         setIsLoading(false);
       }
     } catch (error) {
