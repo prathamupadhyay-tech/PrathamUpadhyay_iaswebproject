@@ -37,9 +37,8 @@ const saveTopper = async (req, res) => {
     const buffer = Buffer.from(base64ImageData, "base64");
 
     const compressedBuffer = await sharp(buffer)
-      .resize({ width: 250, height: 250 })
       .withMetadata()
-      .jpeg({ quality: 80 }) // Adjust quality as needed
+      .jpeg({ quality: 50 }) // Adjust quality as needed
       .toBuffer();
 
     // const filename = new Date().getTime() + "-" + req.file.originalname;
