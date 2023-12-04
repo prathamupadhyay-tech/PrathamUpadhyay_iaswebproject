@@ -81,11 +81,7 @@ const TopperForm = () => {
         setIsLoading(false);
         router.push("/Admin/Toppers");
       } else {
-        const data = await res.json();
-        console.log(data);
-        alert(
-          "An error occurred. Please try again. Error message: " + data.message
-        );
+        alert("This");
         setIsLoading(false);
       }
     } catch (error) {
