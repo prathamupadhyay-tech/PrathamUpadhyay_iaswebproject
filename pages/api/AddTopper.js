@@ -73,7 +73,7 @@ const saveTopper = async (fields, files) => {
       .withMetadata()
       .jpeg({ quality: 80 }) // Adjust quality as needed
       .toBuffer();
-    
+
     // const filename = new Date().getTime() + "-" + req.file.originalname;
     // const newFilePath = path.join(UPLOAD_PATH, filename);
 
@@ -83,7 +83,7 @@ const saveTopper = async (fields, files) => {
     //   .toBuffer();
 
     const image64 = compressedBuffer.toString("base64");
-   
+
     let newTopper = new topper({
       name: fields.name[0],
       rank: parseInt(fields.rank[0]),
@@ -92,7 +92,7 @@ const saveTopper = async (fields, files) => {
       gs2marks: parseInt(fields.gs2marks[0]),
       gs3marks: parseInt(fields.gs3marks[0]),
       gs4marks: parseInt(fields.gs4marks[0]),
-      ProfileImage: image64,
+
       essayMarks: parseInt(fields.essayMarks[0]),
       prelimsScoreGs: parseInt(fields.prelimsScoreGs[0]),
       prelimsScoreCsat: parseInt(fields.prelimsScoreCsat[0]),
