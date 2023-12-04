@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Topper.module.css";
@@ -46,7 +46,7 @@ const Toppers = ({ toppers }) => {
                           priority
                           objectFit="cover"
                           objectPosition="center"
-                          src={`/uploads/${data._doc.ProfileImage}`}
+                          src={`data:image/jpeg;base64,${data._doc.ProfileImage}`}
                         ></Image>
                       </div>
                       <div className={styles.TopperDetailsDivs}>

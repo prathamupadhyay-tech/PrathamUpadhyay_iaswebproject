@@ -33,7 +33,7 @@ const TopperCard = ({ toppers }) => {
                 priority
                 objectFit="cover"
                 objectPosition="center"
-                src={`/uploads/${toppers.ProfileImage}`}
+                src={`data:image/jpeg;base64,${toppers.ProfileImage}`}
               ></Image>
             </div>
             <div className={styles.TopperDetailsDivs}>
@@ -160,7 +160,7 @@ export async function getServerSideProps(context) {
       rank: parsedRank,
       year: parsedYear,
     });
-    console.log("topper" + toppers);
+    
     return {
       props: { toppers: JSON.parse(JSON.stringify(toppers)) },
     };
