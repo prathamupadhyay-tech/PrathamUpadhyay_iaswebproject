@@ -73,7 +73,7 @@ const saveTopper = async (fields, files) => {
       .withMetadata()
       .jpeg({ quality: 80 }) // Adjust quality as needed
       .toBuffer();
-    console.log("buffer" + compressedBuffer);
+    
     // const filename = new Date().getTime() + "-" + req.file.originalname;
     // const newFilePath = path.join(UPLOAD_PATH, filename);
 
@@ -83,7 +83,7 @@ const saveTopper = async (fields, files) => {
     //   .toBuffer();
 
     const image64 = compressedBuffer.toString("base64");
-
+    console.log("buffer" + image64);
     let newTopper = new topper({
       name: fields.name[0],
       rank: parseInt(fields.rank[0]),
