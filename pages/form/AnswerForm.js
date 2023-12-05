@@ -259,6 +259,15 @@ const AnswerForm = () => {
     console.log(formData.answerImages);
   };
   const clearField = (fieldName) => {
+    if (fieldName === "writtenBy") {
+      console.log("jello");
+      setWrittenByFieldDis(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        topperName: "",
+        writtenBy: "",
+      }));
+    }
     if (fieldName === "paper") {
       setPaperFieldDis(false);
       setFormData((prevData) => ({
