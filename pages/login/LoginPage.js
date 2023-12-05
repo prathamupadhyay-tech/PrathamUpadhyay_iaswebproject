@@ -63,7 +63,7 @@ const LoginPage = () => {
       <div className={styles.loginMainContainer}>
         <div className={styles.loginContainer}>
           <div className={styles.loginHeading}>
-            <h1>Truely</h1>
+            <h1>Truly</h1>
             <h2>IAS</h2>
           </div>
 

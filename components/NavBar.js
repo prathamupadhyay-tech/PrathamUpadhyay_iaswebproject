@@ -67,7 +67,7 @@ const NavBar = ({ logout, user }) => {
         <div className={styles.navbarContainer}>
           <div className={styles.navEleDiv}>
             <div className={styles.logo}>
-              <h1>Truely IAS</h1>
+              <h1>Truly IAS</h1>
             </div>
             {!showHamburger && (
               <>
