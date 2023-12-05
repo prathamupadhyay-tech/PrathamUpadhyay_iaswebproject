@@ -74,6 +74,7 @@ const handler = async (req, res) => {
       // }
       let images = req.body.answerImages;
       let ansImage = [];
+      
       for (let i = 0; i < images.length; i++) {
         const startIndex = images[i].data.indexOf(",") + 1;
         const base64ImageData = images[i].data.slice(startIndex);
