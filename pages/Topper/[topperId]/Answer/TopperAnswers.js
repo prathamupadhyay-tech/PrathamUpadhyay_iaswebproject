@@ -7,7 +7,6 @@ import paper from "@/models/paper";
 import topic from "@/models/topic";
 import subtopic from "@/models/subtopic";
 const TopperAnswers = ({ toppers, answers }) => {
-  
   return (
     <div className={styles.MainAnswersContainer}>
       <div className={styles.AnswersContainerHeading}>
@@ -25,7 +24,7 @@ const TopperAnswers = ({ toppers, answers }) => {
           <div>
             <h2>Written By</h2>
           </div>
-          <div>
+          {/* <div>
             <h2>Paper</h2>
           </div>
           <div>
@@ -33,7 +32,7 @@ const TopperAnswers = ({ toppers, answers }) => {
           </div>
           <div>
             <h2>Subtopic Name</h2>
-          </div>
+          </div> */}
           <div>
             <h2>View Answer</h2>
           </div>
@@ -45,16 +44,16 @@ const TopperAnswers = ({ toppers, answers }) => {
               <div>{data.questionNumber}</div>
               <div>{toppers.name}</div>
 
-              <div>{data.paper.name}</div>
+              {/* <div>{data.paper.name}</div> */}
 
-              {data.topic.map((topic, topicIndex) => (
+              {/* {data.topic.map((topic, topicIndex) => (
                 <>
                   <div key={topicIndex}>{topic.name}</div>
                 </>
               ))}
               {data.subTopic.map((subtopic, subtopicIndex) => (
                 <div key={subtopicIndex}>{subtopic.name}</div>
-              ))}
+              ))} */}
               <div className={styles.viewAnswerBtn}>
                 <button>View</button>
               </div>
@@ -78,7 +77,7 @@ export async function getServerSideProps(context) {
     const name = slugName.replace(/-/g, " ");
     const parsedRank = parseInt(rank, 10);
     const parsedYear = parseInt(year, 10);
-    
+
     const toppers = await topper
       .findOne({
         name,
@@ -88,20 +87,20 @@ export async function getServerSideProps(context) {
       .populate({
         path: "Answers",
         model: answer,
-        populate: [
-          {
-            path: "paper",
-            model: paper,
-          },
-          {
-            path: "topic", // Use "topic" instead of "Answers.topic"
-            model: topic,
-          },
-          {
-            path: "subTopic", // Use "subTopic" instead of "Answers.subTopic"
-            model: subtopic,
-          },
-        ],
+        // populate: [
+        //   {
+        //     path: "paper",
+        //     model: paper,
+        //   },
+        //   {
+        //     path: "topic", // Use "topic" instead of "Answers.topic"
+        //     model: topic,
+        //   },
+        //   {
+        //     path: "subTopic", // Use "subTopic" instead of "Answers.subTopic"
+        //     model: subtopic,
+        //   },
+        // ],
       })
 
       .exec();

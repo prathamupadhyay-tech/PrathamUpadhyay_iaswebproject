@@ -15,7 +15,7 @@ const answerSchema = new mongoose.Schema({
   },
   answerText: {
     type: String,
-    required: true,
+   
   },
   answerImages: [
     {
@@ -30,19 +30,19 @@ const answerSchema = new mongoose.Schema({
   paper: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Paper",
-    required: true,
+
   },
   topic: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Topic",
-      required: true,
+     
     },
   ],
   subTopic:[{
     type: mongoose.Schema.Types.ObjectId,
     ref:"Subtopic",
-    required:true,
+   
     
 
   }]

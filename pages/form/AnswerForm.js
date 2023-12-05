@@ -4,12 +4,13 @@ import React from "react";
 import styles from "./QuestionForm.module.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import close from "./utils/imgs/close.png";
 import axios from "axios";
 import styles2 from "./AnswerForm.module.css";
-
+import Image from "next/image";
 const AnswerForm = () => {
   const router = useRouter();
-  const MAX_IMAGE_SIZE_BYTES = 600 * 1024;
+
   const [users, setUsers] = useState([]);
   const [ImageName, setImageName] = useState([]);
   const [formData, setFormData] = useState({
@@ -239,7 +240,24 @@ const AnswerForm = () => {
       answerImages: [],
     }));
   };
+  const handleClearImage = (imageName) => {
+    console.log("hello");
+    const index = formData.answerImages.findIndex(
+      (image) => image.name === imageName
+    );
 
+    if (index !== -1) {
+      const updatedAnswerImages = [...formData.answerImages];
+
+      updatedAnswerImages.splice(index, 1);
+
+      setFormData({
+        ...formData,
+        answerImages: updatedAnswerImages,
+      });
+    }
+    console.log(formData.answerImages);
+  };
   const clearField = (fieldName) => {
     if (fieldName === "paper") {
       setPaperFieldDis(false);
@@ -255,19 +273,12 @@ const AnswerForm = () => {
     console.log(formData.answerImages);
     if (files.length > 0) {
       const newImages = [];
-
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
 
-        if (file.size > MAX_IMAGE_SIZE_BYTES) {
-          alert(
-            `Image ${file.name} size exceeds the maximum allowed size (600KB). Please choose a smaller image.`
-          );
-        } else {
-          const base64Image = await convertToBase64(file);
-          setImageName((prevData) => [...prevData, file.name]);
-          newImages.push(base64Image);
-        }
+        const base64Image = await convertToBase64(file);
+
+        newImages.push({ name: file.name, data: base64Image });
       }
 
       setFormData((prevData) => ({
@@ -311,24 +322,19 @@ const AnswerForm = () => {
   const handleImagePaste = async (e) => {
     if (e.clipboardData.items.length) {
       for (let i = 0; i < e.clipboardData.items.length; i++) {
+        const newImages = [];
         if (e.clipboardData.items[i].type.indexOf("image") !== -1) {
           const fileObject = e.clipboardData.items[i].getAsFile();
 
           if (fileObject) {
-            if (fileObject.size > MAX_IMAGE_SIZE_BYTES) {
-              alert(
-                "Image size exceeds the maximum allowed size (600KB). Please choose a smaller image."
-              );
-            } else {
-              setImageName((prevData) => [...prevData, fileObject.name]);
-              const base64Image = await convertToBase64(fileObject);
+            const base64Image = await convertToBase64(fileObject);
 
-              if (base64Image) {
-                setFormData((prevData) => ({
-                  ...prevData,
-                  answerImages: [...prevData.answerImages, ...base64Image],
-                }));
-              }
+            newImages.push({ name: fileObject.name, data: base64Image });
+            if (base64Image) {
+              setFormData((prevData) => ({
+                ...prevData,
+                answerImages: [...prevData.answerImages, ...newImages],
+              }));
             }
           }
         }
@@ -340,142 +346,107 @@ const AnswerForm = () => {
     }
   };
   return (
-    <div className={styles.all}>
-      <div className={styles.questionFormContainer}>
-        <form onSubmit={handleSubmit} className={styles.questionForm} action="">
-          <div className={styles.formHeading}>
+    <div className={styles2.all}>
+      <div className={styles2.questionFormContainer}>
+        <form
+          onSubmit={handleSubmit}
+          className={styles2.questionForm}
+          action=""
+        >
+          <div className={styles2.formHeading}>
             <h1>
               Add <span>Answers</span>{" "}
             </h1>
           </div>
 
-          <div className={styles.formInsideContainer}>
-            <div className={styles.firstHalf}>
-              <div className={styles.intputDiv}>
-                <div className={styles.labels}>Test Code</div>
+          <div className={styles2.formInsideContainer}>
+            <div className={styles2.firstHalf}>
+              <div className={styles2.inputDiv}>
                 <input
                   type="text"
                   name="testCode"
+                  placeholder="Test Code"
                   value={formData.testCode}
                   onChange={handleInputChange}
                 />
               </div>
 
-              <div className={styles.intputDiv}>
-                <div className={styles.labels}>questionNumber</div>
+              <div className={styles2.inputDiv}>
                 <input
                   type="number"
+                  placeholder="Question Number"
                   name="questionNumber"
                   value={formData.questionNumber}
                   onChange={handleInputChange}
                 />
               </div>
 
-              <div className={styles.intputDiv}>
-                <div className={styles.labels}>questionText</div>
+              <div className={styles2.inputDiv}>
                 <input
                   type="text"
                   name="questionText"
+                  placeholder="Question Text"
                   value={formData.questionText}
                   onChange={handleInputChange}
                 />
               </div>
-              <div className={styles.intputDiv}>
-                <div className={styles.labels}>answerText</div>
+              {/* <div className={styles.intputDiv}>
+              
                 <input
                   type="text"
+                  placeholder="Answer Text"
                   name="answerText"
                   value={formData.answerText}
                   onChange={handleInputChange}
                 />
-              </div>
-              <div className={styles.intputDiv}>
-                <div className={styles.labels}>answerImages</div>
-                <div>
-                  {
-                    <input
-                      type="file"
-                      name="Image"
-                      accept="image/*"
-                      multiple
-                      placeholder="Image url"
-                      onChange={handleImageUpload}
-                    />
-                  }
+              </div> */}
 
-                  {ImageName.map((data, index) => {
-                    return (
-                      <div key={index}>
-                        <p>File: {data}</p>
-                      </div>
-                    );
-                  })}
-                  {
+              <div className={styles2.inputDivInner}>
+                <div className={styles2.inputDiv}>
+                  <input
+                    type="text"
+                    name="writtenBy"
+                    placeholder="Written By"
+                    disabled={setWrittenByFieldDis}
+                    value={formData.topperName}
+                    onChange={handleInputChange}
+                  />
+                  {writtenByFieldDis && (
                     <div
-                      onPaste={handleImagePaste}
-                      style={{
-                        border: "2px dashed #ccc",
-                        padding: "20px",
-                        textAlign: "center",
+                      onClick={() => {
+                        clearField("writtenBy");
                       }}
                     >
-                      <p>Or paste an image using Ctrl+V</p>
-                    </div>
-                  }
-                  {formData.answerImages && (
-                    <button onClick={handleClear} className={styles.clearBtn}>
                       Clear
-                    </button>
-                  )}
-                </div>
-              </div>
-              <div className={styles.intputDiv}>
-                <div className={styles.labels}>writtenBy</div>
-                <div className={styles.inputDivInner}>
-                  <div className={styles2.inputDiv}>
-                    <input
-                      type="text"
-                      name="writtenBy"
-                      disabled={setWrittenByFieldDis}
-                      value={formData.topperName}
-                      onChange={handleInputChange}
-                    />
-                    {writtenByFieldDis && (
-                      <div
-                        onClick={() => {
-                          clearField("writtenBy");
-                        }}
-                      >
-                        Clear
-                      </div>
-                    )}
-                  </div>
-
-                  {formData.topperName && !writtenByFieldDis && (
-                    <div className={styles2.optionsContainer}>
-                      {users
-                        .slice(0, 5)
-                        .filter((item) => {
-                          return formData.topperName.toLowerCase() === ""
-                            ? item
-                            : item.name
-                                .toLowerCase()
-                                .includes(formData.topperName.toLowerCase());
-                        })
-                        .map((result) => (
-                          <div
-                            onClick={() => handleSelectForTopper(result)}
-                            key={result._id}
-                            className={styles2.option}
-                          >
-                            {result.name}
-                          </div>
-                        ))}
                     </div>
                   )}
                 </div>
+
+                {formData.topperName && !writtenByFieldDis && (
+                  <div className={styles2.optionsContainer}>
+                    {users
+                      .slice(0, 5)
+                      .filter((item) => {
+                        return formData.topperName.toLowerCase() === ""
+                          ? item
+                          : item.name
+                              .toLowerCase()
+                              .includes(formData.topperName.toLowerCase());
+                      })
+                      .map((result) => (
+                        <div
+                          onClick={() => handleSelectForTopper(result)}
+                          key={result._id}
+                          className={styles2.option}
+                        >
+                          {result.name}
+                        </div>
+                      ))}
+                  </div>
+                )}
               </div>
-              <div className={styles.intputDiv}>
+
+              {/* <div className={styles.intputDiv}>
                 <div className={styles.labels}>paper</div>
                 <div className={styles.inputDivInner}>
                   <div className={styles2.inputDiv}>
@@ -521,17 +492,82 @@ const AnswerForm = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className={styles.separator}></div>
-            <div className={styles.secondHalf}>
-              <h4>Added Topics</h4>
+            <div className={styles2.secondHalf}>
+              <div className={styles2.intputDivImage}>
+                <h2>Upload Images</h2>
+                <div className={styles2.imageInputDiv}>
+                  <div className={styles2.imageDivFirst}>
+                    {formData.answerImages &&
+                      formData.answerImages.map((data, index) => {
+                        if (data.name !== "") {
+                          return (
+                            <div
+                              className={styles2.imageUploadedDiv}
+                              key={index}
+                            >
+                              <p> {data.name}</p>
+                              <div onClick={() => handleClearImage(data.name)}>
+                                <Image
+                                  src={close}
+                                  fill
+                                  objectFit="contain"
+                                  objectPosition="center"
+                                ></Image>
+                              </div>
+                            </div>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })}
+                    {ImageName.length === 0 && (
+                      <div className={styles2.addImagePrompt}>
+                        <h3>Just add an Image and we will handle the rest!</h3>
+                      </div>
+                    )}
+                  </div>
+                  <div className={styles2.imageDivSecond}>
+                    <input
+                      type="file"
+                      name="Image"
+                      id="files"
+                      style={{ display: "none" }}
+                      accept="image/*"
+                      multiple
+                      placeholder="Image url"
+                      onChange={handleImageUpload}
+                    />
+
+                    {
+                      <div
+                        className={styles2.imagePasteSec}
+                        onPaste={handleImagePaste}
+                        style={{
+                          border: "1px dashed #ccc",
+                          padding: "20px",
+                          textAlign: "center",
+                        }}
+                      >
+                        <p>Or paste an image using Ctrl+V</p>
+                      </div>
+                    }
+
+                    <label className={styles2.uploadImagBtn} htmlFor="files">
+                      <p>Upload</p>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              {/* <h4>Added Topics</h4>
               <div className={styles2.showSelectedtopic}>
                 {topicArray.map((data, index) => {
                   return <>{data.name && <div key={index}>{data.name}</div>}</>;
                 })}
-              </div>
-              <div className={styles.intputDiv}>
+              </div> */}
+              {/* <div className={styles.intputDiv}>
                 <div className={styles.labels}>topicName</div>
 
                 <div className={styles.inputDivInner}>
@@ -570,14 +606,14 @@ const AnswerForm = () => {
                     </>
                   )}
                 </div>
-              </div>
-              <h4>Added sub Topics</h4>
+              </div> */}
+              {/* <h4>Added sub Topics</h4>
               <div className={styles2.showSelectedtopic}>
                 {subTopicArray.map((data, index) => {
                   return <>{data.name && <div key={index}>{data.name}</div>}</>;
                 })}
-              </div>
-              <div className={styles.intputDiv}>
+              </div> */}
+              {/* <div className={styles.intputDiv}>
                 <div className={styles.labels}>subtopicName</div>
 
                 <div className={styles.inputDivInner}>
@@ -614,15 +650,15 @@ const AnswerForm = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
-          <div className={styles.btnHolder}>
+          <div className={styles2.btnHolder}>
             <button
               type="submit"
               disabled={isLoading}
-              className={styles.submitQuestionForm}
+              className={styles2.submitQuestionForm}
             >
               {isLoading && <span>Adding...</span>}
               {!isLoading && <span>Add Answer </span>}
