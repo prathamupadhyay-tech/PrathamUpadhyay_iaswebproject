@@ -15,7 +15,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    
+   
     
 }
 .optionsContainer{
@@ -172,7 +172,7 @@ cursor: pointer;
 /* image section  */
 .imageInputDiv{
     display: flex;
-    height: 20em;
+    
     gap: 1em;
     
 }

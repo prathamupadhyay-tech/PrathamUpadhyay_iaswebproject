@@ -38,11 +38,9 @@ const topperSchema = new mongoose.Schema({
   },
   prelimsScoreGs: {
     type: Number,
-    required: true,
   },
   prelimsScoreCsat: {
     type: Number,
-    required: true,
   },
   optionalSub: {
     type: String,
@@ -59,6 +57,14 @@ const topperSchema = new mongoose.Schema({
   Remarks: {
     type: String,
   },
+  interviewMarks: {
+    type: String,
+    required: true,
+  },
+  writtenMarks: {
+    type: Number,
+    required: true,
+  },
   Answers: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -67,6 +73,7 @@ const topperSchema = new mongoose.Schema({
   ],
   ProfileImage: {
     type: String,
+    required: true,
   },
 });
 mongoose.models = {};

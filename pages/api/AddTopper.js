@@ -64,7 +64,8 @@ const saveTopper = async (req, res) => {
       prelimsScoreGs: req.body.prelimsScoreGs,
       prelimsScoreCsat: req.body.prelimsScoreCsat,
       optionalSub: req.body.optionalSub,
-
+      writtenMarks:req.body.writtenMarks,
+      interviewMarks:req.body.interviewMarks,
       optional1Marks: req.body.optional1Marks,
       optional2Marks: req.body.optional2Marks,
       Remarks: req.body.Remarks,

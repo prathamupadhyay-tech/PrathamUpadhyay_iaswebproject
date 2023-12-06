@@ -53,17 +53,12 @@
 .inputDiv{
     position: relative;
     display: flex;
+    flex-direction: column;
     gap: 1em;
 }
-.inputDiv>div{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.2em 0.5em;
-    color: white;
-    font-weight: 600;
-    border-radius: 0.3em;
-    background-color: rgb(53, 167, 255);
+.inputDiv>h2{
+    color: gray;
+    font-weight: 100;
 }
 .inputDiv>div:hover{
 cursor: pointer;
@@ -112,7 +107,7 @@ cursor: pointer;
     display: flex;
     flex-direction: column;
     gap: 2em;
-    width: 50%;
+    width: 100%;
 }
 .separator{
     background-color: rgb(174, 174, 174);
@@ -278,7 +273,7 @@ cursor: pointer;
     box-shadow: 0px 0px 4px 0px rgb(255, 36, 36);
     width: 8em;
     height: 8em;
-    left: -30%;
+    left: -15%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -303,4 +298,47 @@ cursor: pointer;
     right: -25%;
     width: 0em;
     height: 0em;
+}
+
+
+/* options  */
+.optionsDiv{
+    display: flex;
+    color:black !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    flex-direction: column;
+    gap: 1em;
+    padding: 0em !important;
+    align-items: flex-start !important;
+    width: 100%;
+}
+.optionsDiv>h2{
+    font-weight: 100;
+    color: gray;
+}
+.optionsDiv>div{
+    display: flex;
+    gap: 2em;
+    width: 100%;
+
+    
+}
+.optionsDiv>div>div{
+    font-size: 2em;
+    width: 1em;
+    padding: 0.8em;
+    height: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:  white;
+    border-radius: 50%;
+    background-color: rgb(68, 162, 255);
+}
+.optionsDiv>div>div:hover{
+    cursor: pointer;
+    background-color: rgba(68, 162, 255, 0.807);
+}
+.selectedOption{
+    background-color: red !important;
 }
