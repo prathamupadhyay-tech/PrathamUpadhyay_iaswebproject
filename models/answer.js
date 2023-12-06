@@ -15,11 +15,11 @@ const answerSchema = new mongoose.Schema({
   },
   answerText: {
     type: String,
-   
   },
   answerImages: [
     {
       type: String,
+      required: true,
     },
   ],
   writtenBy: {
@@ -30,22 +30,19 @@ const answerSchema = new mongoose.Schema({
   paper: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Paper",
-
   },
   topic: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Topic",
-     
     },
   ],
-  subTopic:[{
-    type: mongoose.Schema.Types.ObjectId,
-    ref:"Subtopic",
-   
-    
-
-  }]
+  subTopic: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subtopic",
+    },
+  ],
 });
 mongoose.models = {};
 export default mongoose.model("Answer", answerSchema);

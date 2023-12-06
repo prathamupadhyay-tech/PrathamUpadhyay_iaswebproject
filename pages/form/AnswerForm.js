@@ -28,6 +28,13 @@ const AnswerForm = () => {
     topicNameId: "",
     subtopicNameId: "",
   });
+  const [errorAlerts, setErrorAlerts] = useState({
+    testCode: "",
+    questionNumber: "",
+    questionText: "",
+    writtenBy: "",
+    image: "",
+  });
 
   const [topicArray, setTopicArray] = useState([{ name: "", id: "" }]);
   const [subTopicArray, setSubTopicArray] = useState([
@@ -54,6 +61,15 @@ const AnswerForm = () => {
   const subTopicInputRef = useRef(null);
 
   const handleInputChange = (e) => {
+    setErrorAlerts((prevData) => ({
+      ...prevData,
+      testCode: "",
+      questionNumber: "",
+      questionText: "",
+      writtenBy: "",
+      image: "",
+    }));
+
     if (e.target.name === "writtenBy") {
       const { value } = e.target;
       setFormData((prevData) => ({
@@ -192,8 +208,39 @@ const AnswerForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
+    if (!formData.testCode) {
+      setErrorAlerts((prevData) => ({
+        ...prevData,
+        testCode: "Test Code is required",
+      }));
+      return;
+    } else if (!formData.questionNumber) {
+      setErrorAlerts((prevData) => ({
+        ...prevData,
+        questionNumber: "Question number is required",
+      }));
+      return;
+    } else if (!formData.questionText) {
+      setErrorAlerts((prevData) => ({
+        ...prevData,
+        questionText: "Question text is required",
+      }));
+      return;
+    } else if (!formData.writtenBy) {
+      setErrorAlerts((prevData) => ({
+        ...prevData,
+        writtenBy: "Written by is required",
+      }));
+      return;
+    } else if (formData.answerImages.length === 0) {
+      setErrorAlerts((prevData) => ({
+        ...prevData,
+        image: "Question Images is required",
+      }));
+      return;
+    }
+    setIsLoading(true);
     const question = {
       testCode: formData.testCode,
       questionNumber: formData.questionNumber,
@@ -279,7 +326,7 @@ const AnswerForm = () => {
   };
   const handleImageUpload = async (e) => {
     const files = e.target.files;
-    console.log(formData.answerImages);
+
     if (files.length > 0) {
       const newImages = [];
       for (let i = 0; i < files.length; i++) {
@@ -293,6 +340,14 @@ const AnswerForm = () => {
       setFormData((prevData) => ({
         ...prevData,
         answerImages: [...prevData.answerImages, ...newImages],
+      }));
+      setErrorAlerts((prevData) => ({
+        ...prevData,
+        testCode: "",
+        questionNumber: "",
+        questionText: "",
+        writtenBy: "",
+        image: "",
       }));
     }
   };
@@ -344,6 +399,14 @@ const AnswerForm = () => {
                 ...prevData,
                 answerImages: [...prevData.answerImages, ...newImages],
               }));
+              setErrorAlerts((prevData) => ({
+                ...prevData,
+                testCode: "",
+                questionNumber: "",
+                questionText: "",
+                writtenBy: "",
+                image: "",
+              }));
             }
           }
         }
@@ -374,20 +437,32 @@ const AnswerForm = () => {
                 <input
                   type="text"
                   name="testCode"
-                  placeholder="Test Code"
+                  placeholder="Test Code *"
                   value={formData.testCode}
                   onChange={handleInputChange}
                 />
+
+                {errorAlerts.testCode && (
+                  <div className={styles2.alertBox}>
+                    {" "}
+                    <p>{errorAlerts.testCode}</p>
+                  </div>
+                )}
               </div>
 
               <div className={styles2.inputDiv}>
                 <input
                   type="number"
-                  placeholder="Question Number"
+                  placeholder="Question Number *"
                   name="questionNumber"
                   value={formData.questionNumber}
                   onChange={handleInputChange}
                 />
+                {errorAlerts.questionNumber && (
+                  <div className={styles2.alertBox}>
+                    <p>{errorAlerts.questionNumber}</p>
+                  </div>
+                )}
               </div>
 
               <div className={styles2.inputDiv}>
@@ -398,6 +473,11 @@ const AnswerForm = () => {
                   value={formData.questionText}
                   onChange={handleInputChange}
                 />
+                {errorAlerts.questionText && (
+                  <div className={styles2.alertBox}>
+                    <p>{errorAlerts.questionText}</p>
+                  </div>
+                )}
               </div>
               {/* <div className={styles.intputDiv}>
               
@@ -420,6 +500,11 @@ const AnswerForm = () => {
                     value={formData.topperName}
                     onChange={handleInputChange}
                   />
+                  {errorAlerts.writtenBy && (
+                    <div className={styles2.alertBox}>
+                      <p>{errorAlerts.writtenBy}</p>
+                    </div>
+                  )}
                   {writtenByFieldDis && (
                     <div
                       onClick={() => {
@@ -535,6 +620,8 @@ const AnswerForm = () => {
                     {ImageName.length === 0 && (
                       <div className={styles2.addImagePrompt}>
                         <h3>Just add an Image and we will handle the rest!</h3>
+                        {/*  */}
+                        {errorAlerts.image && <p>{errorAlerts.image} </p>}
                       </div>
                     )}
                   </div>
