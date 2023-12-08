@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
- 
   const authToken = request.cookies.get("authToken")?.value;
-  
-
 
   const loggedInUserNotAccessPaths =
     request.nextUrl.pathname === "/login/LoginPage";
@@ -23,5 +20,6 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/login/:path*", "/Admin/:path*", "/form/:path*"],
+  matcher: [],
 };
+// "/form/:path*"

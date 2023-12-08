@@ -9,15 +9,26 @@ const UserPage = ({ questions }) => {
     <div className={styles.all}>
       <div className={styles.questionsMainContainer}>
         <div className={styles.questionHeadDiv}>
-          <h1 className={styles.questionHead}>QUESTIONS</h1>
+          <h1 className={styles.questionHead}>Admin Dashboard</h1>
         </div>
-        <div className={styles.questionDesc}>
-          <p>Title</p>
-          <p>Submit-time</p>
-        </div>
+
         <div className={styles.horizontalLine}></div>
         <div className={styles.questionsContainter}>
-          {questions &&
+          <Link href={`/question/pyqs-list-admin`}>
+            <div>
+              <div className={styles.adminPagesOption}>
+                <h2>Pyqs </h2>
+              </div>
+            </div>
+          </Link>
+          <Link href={`/question/current-affairs-list-admin`}>
+            <div>
+              <div className={styles.adminPagesOption}>
+                <h2>Current affairs </h2>
+              </div>
+            </div>
+          </Link>
+          {/* {questions &&
             questions.map((item, index) => {
               const isEven = index % 2 === 0;
               const questionContainerClass = isEven
@@ -40,7 +51,7 @@ const UserPage = ({ questions }) => {
                   </div>
                 </Link>
               );
-            })}
+            })} */}
         </div>
       </div>
     </div>

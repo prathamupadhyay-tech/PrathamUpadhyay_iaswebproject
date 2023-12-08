@@ -6,7 +6,7 @@
     min-height: 92vh;
     display: flex;
     justify-content: center;
-    background-color: #151515;
+   
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .questionDesc{
@@ -35,14 +35,14 @@
 }
 .horizontalLine{
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.201);
+    background-color: rgba(17, 17, 17, 0.338);
     width: 100%;
 }
 .questionContainer{
     width: 100%;
     padding: 1em;
     display: flex;
-    border: 1px rgba(255, 255, 255, 0.291) solid;
+    border: 1px rgba(17, 17, 17, 0.338) solid;
     align-items: center;
     justify-content: space-between;
     color: white;
@@ -62,11 +62,37 @@
     min-width: 20em;
     align-items: center;
     padding: 1em 1em;
-    border-left: 1px rgba(255, 255, 255, 0.338) solid;
-    border-right: 1px rgba(255, 255, 255, 0.338) solid;
+    border-left: 1px rgba(17, 17, 17, 0.338) solid;
+    border-right: 1px rgba(17, 17, 17, 0.338) solid;
 }
 .questionHeadDiv{
     padding: 1em;
     width: 100%;
 
+}
+.adminPagesOption{
+    padding: 0.3em;
+    position: relative;
+    overflow: hidden;
+    color: rgb(55, 55, 55);
+    transition: padding-left 0.4s ease;
+    border-bottom: 1px black solid;
+}
+.adminPagesOption:hover{
+    
+    padding-left:3em ;
+}
+.adminPagesOption::before{
+    content: "";
+    position: absolute;
+    width: 3em;
+    height: 0.1em;
+    left: -3em;
+    top: 1em;
+    transition: 0.4s ease;
+    background-color: rgb(55, 55, 55);
+
+}
+.adminPagesOption:hover::before{
+    left: 0em;
 }

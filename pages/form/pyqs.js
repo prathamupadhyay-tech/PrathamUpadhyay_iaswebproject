@@ -45,14 +45,12 @@ const Pyqs = () => {
         ...prevData,
         question: content,
       }));
-      
     }
     if (name === "solution") {
       setFormData((prevData) => ({
         ...prevData,
         solution: content,
       }));
-     
     }
     console.log(formData.question);
   };
@@ -189,10 +187,10 @@ const Pyqs = () => {
                 <JoditEditor
                   ref={editor}
                   //   value={content}
-                  tabIndex={1} // tabIndex of textarea
+                  tabIndex={1}
                   onBlur={(newContent) =>
                     handleTextEditor("question", newContent)
-                  } // preferred to use only this option to update the content for performance reasons
+                  }
                   onChange={(newContent) => {}}
                 />
               </div>
