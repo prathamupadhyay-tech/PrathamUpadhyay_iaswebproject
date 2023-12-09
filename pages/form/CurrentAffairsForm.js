@@ -10,7 +10,7 @@ import Image from "next/image";
 import close from "./utils/imgs/close.png";
 import question from "@/models/question";
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
-const currentAffairsForm = () => {
+const CurrentAffairsForm = () => {
   const router = useRouter();
   const editor = useRef(null);
   const editor2 = useRef(null);
@@ -315,4 +315,4 @@ const currentAffairsForm = () => {
   );
 };
 
-export default currentAffairsForm;
+export default CurrentAffairsForm;
