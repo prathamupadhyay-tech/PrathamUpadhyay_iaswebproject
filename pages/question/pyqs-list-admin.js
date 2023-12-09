@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./pyqs.module.css";
 import mongoose from "mongoose";
 const PyqsListadmin = ({ questions }) => {
-  console.log(questions);
+  
   return (
     <div className={styles.mainContainer}>
       <div className={styles.wrapper}>

@@ -89,6 +89,11 @@ const NavBar = ({ logout, user }) => {
                 <div className={styles.navEle}>
                   <Link href={"/form/pyqs"}>Add Pyqs </Link>
                 </div>
+                <div className={styles.navEle}>
+                  <Link href={"/form/CurrentAffairsForm"}>
+                    Add CurrentAffairs{" "}
+                  </Link>
+                </div>
               </>
             )}
           </div>

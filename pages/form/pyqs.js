@@ -169,7 +169,7 @@ const Pyqs = () => {
         <form onSubmit={handleSubmit} className={styles.questionForm} action="">
           <div className={styles.formHeading}>
             <h1>
-              Add <span>Question</span>{" "}
+              Add <span>Previous year questions</span>{" "}
             </h1>
           </div>
 

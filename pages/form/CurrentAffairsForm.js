@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useRef, useMemo } from "react";
 import React from "react";
 import styles from "./pyqs.module.css";
@@ -10,9 +9,8 @@ import axios from "axios";
 import Image from "next/image";
 import close from "./utils/imgs/close.png";
 import question from "@/models/question";
-
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
-const Pyqs = () => {
+const currentAffairsForm = () => {
   const router = useRouter();
   const editor = useRef(null);
   const editor2 = useRef(null);
@@ -45,14 +43,12 @@ const Pyqs = () => {
         ...prevData,
         question: content,
       }));
-      
     }
     if (name === "solution") {
       setFormData((prevData) => ({
         ...prevData,
         solution: content,
       }));
-     
     }
     console.log(formData.question);
   };
@@ -142,7 +138,7 @@ const Pyqs = () => {
     };
 
     try {
-      const res = await fetch("/api/AddPyqs", {
+      const res = await fetch("/api/AddCurrentAffairs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -164,14 +160,13 @@ const Pyqs = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <div className={styles.all}>
       <div className={styles.questionFormContainer}>
         <form onSubmit={handleSubmit} className={styles.questionForm} action="">
           <div className={styles.formHeading}>
             <h1>
-              Add <span>Question</span>{" "}
+              Add <span>Current affairs questions</span>{" "}
             </h1>
           </div>
 
@@ -189,10 +184,10 @@ const Pyqs = () => {
                 <JoditEditor
                   ref={editor}
                   //   value={content}
-                  tabIndex={1} // tabIndex of textarea
+                  tabIndex={1}
                   onBlur={(newContent) =>
                     handleTextEditor("question", newContent)
-                  } // preferred to use only this option to update the content for performance reasons
+                  }
                   onChange={(newContent) => {}}
                 />
               </div>
@@ -320,4 +315,4 @@ const Pyqs = () => {
   );
 };
 
-export default Pyqs;
+export default currentAffairsForm;
