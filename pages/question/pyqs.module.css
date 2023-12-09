@@ -5,7 +5,7 @@
 
 .headingContainer{
     display: grid;
-    grid-template-columns: repeat(5 , 1fr);
+    grid-template-columns: repeat(6 , 1fr);
 
 }
 .headingContainer>div{
@@ -22,7 +22,7 @@
 }
 .questionContainer{
     display: grid;
-    grid-template-columns: repeat(5 , 1fr);
+    grid-template-columns: repeat(6 , 1fr);
 }
 .questionContainer>div{
     padding: 1em;

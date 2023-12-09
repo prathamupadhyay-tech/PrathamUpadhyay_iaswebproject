@@ -32,6 +32,8 @@ const pyqsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+}, {
+  timestamps: true,
 });
 mongoose.models = {};
 export default mongoose.model("Pyqs", pyqsSchema);

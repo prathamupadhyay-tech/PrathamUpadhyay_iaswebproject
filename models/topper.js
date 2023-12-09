@@ -75,6 +75,8 @@ const topperSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+}, {
+  timestamps: true,
 });
 mongoose.models = {};
 export default mongoose.model("Topper", topperSchema);
