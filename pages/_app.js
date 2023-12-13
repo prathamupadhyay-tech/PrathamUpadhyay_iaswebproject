@@ -1,5 +1,6 @@
 import NavBar from "@/components/NavBar";
 import "@/styles/globals.css";
+import Navbar from "@/user/Navbar";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import NextNProgress from "nextjs-progressbar";
@@ -36,7 +37,8 @@ export default function App({ Component, pageProps }) {
         height={4}
         showOnShallow={true}
       />
-      <NavBar logout={logout} user={user} key={key} />
+      <Navbar></Navbar>
+      {/* <NavBar logout={logout} user={user} key={key} /> */}
       <Component {...pageProps} />
     </div>
   );

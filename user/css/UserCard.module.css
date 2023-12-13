@@ -1,0 +1,221 @@
+
+
+.TopperFirstDiv{
+    width: 100%;
+    
+    display: flex;
+    
+}
+.TopperCard{
+    box-shadow: 0px 0px 10px 0px rgb(210, 210, 210);
+    border-radius: 1.4em;
+    width: 100%;
+    padding:2em 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+}
+.TopperDetailsDiv{
+    width: 50%;
+    display: flex;
+    gap: 1em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.TopperMarksDiv{
+    width: 50%;
+    display: flex;  
+    gap: 1em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.TopperMarksDiv>h3{
+    font-size: 1em;
+
+    font-weight: 400;
+}
+.TopperIconOuterDiv{
+    box-shadow: 0px 0px 10px 0px rgb(211, 211, 211);
+    width: 8em;
+    height: 8em;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.TopperIconDiv{
+    
+    position: relative;
+    width: 7em;
+    border-radius: 50%;
+    height: 7em;
+}
+.TopperName{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+.TopperName>p{
+    font-size: 1.5em;
+    color: var(--main-color);
+
+}
+.TopperName>h3{
+    font-size: 1.5em;
+}
+.userProfile{
+    border-radius: 50%;
+}
+.TopperMarks{
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
+}
+
+.TopperMarks>div{
+    display: flex;
+    font-size: 0.6em;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5em;
+    color:  gray;
+}
+
+.TopperMarks>div>div{
+    display: flex;
+  
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.4em;
+    color:  gray;
+}
+
+
+.meterContainer {
+    width: 120px;
+    height: 5px;
+    background: #d5d5d5;
+ 
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    
+}
+
+
+.meterValue {
+    height: 120%;
+    background:  var(--main-color);
+    border-radius: 5px;
+    box-shadow: 0px 1px 2px 0px rgb(67, 67, 67) ;
+}
+.finalMarks>p{
+    color: black;
+    font-weight: bold;
+
+}
+.ShowAnswersBtn{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ShowAnswersBtn button{
+    background-color: white;
+    border: none;
+    box-shadow: 0px 0px 10px 0px rgb(212, 212, 212);
+    padding: 0.5em 1em;
+    border-radius: 4em;
+    color: var(--main-color);
+    font-weight: 600;
+    width: 20em;
+    
+}
+.ShowAnswersBtn button:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 10px 0px rgb(194, 194, 194);
+  
+    
+}
+@media only screen and (min-width: 850px) and (max-width:1000px)  {
+    .TopperMarks>div{
+        display: flex;
+        font-size: 0.45em;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5em;
+        color:  gray;
+    }
+    .TopperName>p{
+        font-size: 1em;
+        color: var(--main-color);
+    
+    }
+    .TopperName>h3{
+        font-size: 1.2em;
+    }
+}
+@media (max-width:480px) {
+    .TopperMarks>div{
+        display: flex;
+        font-size: 0.45em;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5em;
+        color:  gray;
+    }
+    .TopperName>p{
+        font-size: 1em;
+        color: var(--main-color);
+    
+    }
+    .TopperName>h3{
+        font-size: 1em;
+    }
+    .TopperIconOuterDiv{
+        box-shadow: 0px 0px 10px 0px rgb(211, 211, 211);
+        width: 6em;
+        height: 6em;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .TopperIconDiv{
+        border: 1px solid gray;
+        position: relative;
+        width: 5em;
+        border-radius: 50%;
+        height: 5em;
+    }
+    .meterContainer {
+        width: 70px;
+        height: 5px;
+        background: #d5d5d5;
+     
+        border-radius: 5px;
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    
+        
+    }
+    
+    
+    .meterValue {
+        height: 120%;
+        background:  var(--main-color);
+        border-radius: 5px;
+        box-shadow: 0px 1px 2px 0px rgb(67, 67, 67) ;
+    }
+}

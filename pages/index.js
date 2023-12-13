@@ -1,15 +1,15 @@
 import Head from "next/head";
-import Image from "next/image";
+
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import QuestionForm from "./form/QuestionForm";
-import MainPage from "../components/MainPage";
-import UserPage from "../user/UserPage";
+
 import mongoose from "mongoose";
-import question from "@/models/question";
+
+import SearchTopper from "@/user/search-toppers";
+import topper from "@/models/topper";
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home({ questions }) {
+export default function Home({ Toppers }) {
+  console.log(Toppers);
   return (
     <>
       <Head>
@@ -20,7 +20,7 @@ export default function Home({ questions }) {
       </Head>
 
       <div>
-        <UserPage questions={questions}></UserPage>
+        <SearchTopper Toppers={Toppers}></SearchTopper>
       </div>
     </>
   );
@@ -30,9 +30,16 @@ export async function getServerSideProps(context) {
     await mongoose.connect(process.env.MONGO_URI);
   }
 
-  let questions = await question.find();
+  let Toppers = await topper.find();
+
+  const slugs = Toppers.map((data) => {
+    const slug = `${data.name.replace(/\s/g, "-")}-rank-${data.rank}-${
+      data.year
+    }`;
+    return { ...data, slug };
+  });
 
   return {
-    props: { questions: JSON.parse(JSON.stringify(questions)) },
+    props: { Toppers: JSON.parse(JSON.stringify(slugs)) },
   };
 }
